@@ -1,6 +1,7 @@
 # Glfw Sample From Linux
 
 ## Environment
+- vim
 - openGL
 - glfw3
 
