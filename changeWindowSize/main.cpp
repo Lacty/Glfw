@@ -2,6 +2,10 @@
 #include <GLFW/glfw3.h>
 
 
+void resize(GLFWwindow* window, const int width, const int height) {
+  glViewport(0, 0, width, height);
+}
+
 int main() {
   GLFWwindow* window;
 
@@ -16,6 +20,7 @@ int main() {
   }
 
   glfwMakeContextCurrent(window);
+  glfwSetWindowSizeCallback(window, resize);
 
   while(!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
