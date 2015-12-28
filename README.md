@@ -6,5 +6,5 @@
 - glfw3
 
 ## Compile
-- `g++ <file>.cpp -L /usr/local/bin/ -lglfw -lGL`
+- `g++ -std=c++11 <file>.cpp -L /usr/local/bin/ -lglfw -lGL`
 - -L <dir> is Backup dir
