@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <cmath>
 #include <GLFW/glfw3.h>
 
 
@@ -14,13 +15,16 @@ void resize(GLFWwindow* window,
   HEIGHT = height;
 }
 
-void resetMatrix() {
+void perspTransformation() {
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  
+  glFrustum( -1,   1, // left   right
+              1,  -1, // buttom top
+            0.5, 5.0);// near   far
+
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glViewport(0, 0, WIDTH, HEIGHT);
-  glOrtho(-WIDTH * 0.5f, WIDTH * 0.5f,
-          -HEIGHT * 0.5f, HEIGHT * 0.5f,
-          0.f, 1.0f);
 }
 
 auto main()->int {
@@ -36,28 +40,30 @@ auto main()->int {
   glfwMakeContextCurrent(window);
   glfwSetWindowSizeCallback(window, resize);
 
-  glOrtho(-WIDTH * 0.5f, WIDTH * 0.5f,
-          -HEIGHT * 0.5f, HEIGHT * 0.5f,
-          0.f, 1.0f);
-
-  float scale = 100.0f;
+  float angle = 0.0f;
 
   while(!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    resetMatrix();
+    perspTransformation();
 
     GLfloat vtx[] = {
-      0.0f, 0.433f,
-      -0.5f, -0.433f,
-      0.5f, -0.433f
+      0.0f, 0.433f, 0.0f,
+      -0.5f, -0.433f, 0.0f,
+      0.5f, -0.433f, 0.0f
     };
-    for (auto& it : vtx) {
-      it *= scale;
-    }
 
-    glVertexPointer(2, GL_FLOAT, 0, vtx);
+    // viewable position z(-0.5 ~ -5.0)
+    glTranslatef(0.0f, 0.0f, -1.5f); // to viewable
+    glRotatef(180, 0.0f, 0.0f, 1.0f);// to revers
+    glScalef(2.0f, 2.0f, 1.0f);
+
+    angle += 2.0f;
+    glRotatef(angle, 0.5f, 0.25f, 0.25f);
+
+    glColor4f(1.0f, 0.4f, 0.0f, 1.0f);
+    glVertexPointer(3, GL_FLOAT, 0, vtx);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glDrawArrays(GL_TRIANGLES, 0, 3);
