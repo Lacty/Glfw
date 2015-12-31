@@ -39,6 +39,33 @@ Eigen::Matrix4f perspView(float fovy,
   return m;
 }
 
+Eigen::Matrix4f lookAt(const Eigen::Vector3f& eye,
+                       const Eigen::Vector3f& target,
+                       const Eigen::Vector3f& up)
+{
+  Eigen::Vector3f a  = eye - target;
+  Eigen::Vector3f z_ = a / a.norm();
+
+  Eigen::Vector3f b  = up.cross(z_);
+  Eigen::Vector3f x_ = b / b.norm();
+
+  Eigen::Vector3f y_ = z_.cross(x_);
+
+  Eigen::Matrix4f R;
+  R << x_.x(), x_.y(), x_.z(), 0.0f,
+       y_.x(), y_.y(), y_.z(), 0.0f,
+       z_.x(), z_.y(), z_.z(), 0.0f,
+         0.0f,   0.0f,   0.0f, 1.0f;
+
+  Eigen::Matrix4f T;
+  T << 1.0f, 0.0f, 0.0f, -eye.x(),
+       0.0f, 1.0f, 0.0f, -eye.y(),
+       0.0f, 0.0f, 1.0f, -eye.z(),
+       0.0f, 0.0f, 0.0f,     1.0f;
+  
+  return R * T;
+}
+
 void perspTrans() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -64,14 +91,30 @@ auto main()->int {
   glfwMakeContextCurrent(window);
   glfwSetWindowSizeCallback(window, resize);
 
-  float angle = 0.0f;
-  float scale = 5.0f;
-
   while(!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     perspTrans();
+
+
+    // Camera
+    static Eigen::Vector3f cam_pos(0.0f, 0.0f,   0.0f);
+    static Eigen::Vector3f cam_rot(0.0f, 0.0f,   0.0f);
+    static Eigen::Vector3f tar_pos(0.0f, 0.0f, -10.0f);
+    static Eigen::Vector3f  cam_up(0.0f, 1.0f,   0.0f);
+
+    Eigen::Matrix4f cm = lookAt(cam_pos, tar_pos, cam_up);
+    glMultMatrixf(cm.data());
+
+    cam_rot.y() += 0.2f;
+
+    glRotatef(-cam_rot.x(), 1.0f, 0.0f, 0.0f);
+    glRotatef(-cam_rot.y(), 0.0f, 1.0f, 0.0f);
+    glRotatef(-cam_rot.z(), 0.0f, 0.0f, 1.0f);
+
+    glTranslatef(-cam_pos.x(), -cam_pos.y(), -cam_pos.z());
+
 
     GLfloat vtx[] = {
       0.0f, 0.433f, 0.0f,
@@ -80,11 +123,6 @@ auto main()->int {
     };
 
     glTranslatef(0.0f, 0.0f, -10.0f);
-    glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
-    glScalef(scale, scale, scale);
-
-    angle += 1.0f;
-    glRotatef(angle, 0.5f, 0.5f, 0.0f);
 
     glColor4f(0.4f, 0.3f, 0.6f, 1.0f);
     glVertexPointer(3, GL_FLOAT, 0, vtx);
