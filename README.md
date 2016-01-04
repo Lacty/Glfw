@@ -4,7 +4,11 @@
 - vim
 - openGL
 - glfw3
+- picojson
 
 ## Compile
-- `g++ -std=c++11 <file>.cpp -L /usr/local/bin/ -lglfw -lGL`
-- -L <dir> is Backup dir
+- `g++ -std=c++11 <file>.cpp -lglfw -lGL`
+- `./a.out` to run
+
+# Makefile
+- `make run` to compile, link and run
