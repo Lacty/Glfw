@@ -17,8 +17,8 @@ private:
   float far;
 
   Eigen::Matrix4f perspView();
-  Eigen::Matrix4f lookAt();
-
+  
+  void lookAt();
   void perspTrans();
 
   void translation();

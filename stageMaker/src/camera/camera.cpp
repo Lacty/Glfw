@@ -51,7 +51,7 @@ void Camera::rotation() {
   glRotatef(-rot.z(), 0.0f, 0.0f, 1.0f);
 }
 
-Eigen::Matrix4f Camera::lookAt() {
+void Camera::lookAt() {
   Eigen::Vector3f a  = pos - target_pos;
   Eigen::Vector3f z_ = a / a.norm();
 
@@ -71,7 +71,15 @@ Eigen::Matrix4f Camera::lookAt() {
        0.0f, 1.0f, 0.0f, -pos.y(),
        0.0f, 0.0f, 1.0f, -pos.z(),
        0.0f, 0.0f, 0.0f,     1.0f;
-  
-  return R * T;
+ 
+  Eigen::Matrix4f m = R * T;
+  glMultMatrixf(m.data());
 }
 
+
+void Camera::update() {
+  perspTrans();
+  lookAt();
+  rotation();
+  translation();
+}
