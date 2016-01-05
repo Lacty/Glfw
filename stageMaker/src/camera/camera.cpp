@@ -83,3 +83,71 @@ void Camera::update() {
   rotation();
   translation();
 }
+
+
+// setter ---
+void Camera::setPos(const Eigen::Vector3f& pos) {
+  this->pos = pos;
+}
+
+void Camera::setRot(const Eigen::Vector3f& rot) {
+  this->rot = rot;
+}
+
+void Camera::setUp(const Eigen::Vector3f& up) {
+  this->up = up;
+}
+
+void Camera::setTargetPos(const Eigen::Vector3f& target_pos) {
+  this->target_pos = target_pos;
+}
+
+void Camera::setFovy(float fovy) {
+  this->fovy = fovy;
+}
+
+void Camera::setAspect(float aspect) {
+  this->aspect = aspect;
+}
+
+void Camera::setNear(float near) {
+  this->near = near;
+}
+
+void Camera::setFar(float far) {
+  this->far = far;
+}
+
+
+// getter ---
+Eigen::Vector3f Camera::getPos() const {
+  return pos;
+}
+
+Eigen::Vector3f Camera::getRot() const {
+  return rot;
+}
+
+Eigen::Vector3f Camera::getUp() const {
+  return up;
+}
+
+Eigen::Vector3f Camera::getTargetPos() const {
+  return target_pos;
+}
+
+float Camera::getFovy() const {
+  return fovy;
+}
+
+float Camera::getAspect() const {
+  return aspect;
+}
+
+float Camera::getNear() const {
+  return near;
+}
+
+float Camera::getFar() const {
+  return far;
+}

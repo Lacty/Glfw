@@ -31,23 +31,23 @@ public:
 
   void update();
 
-  void setPos(Eigen::Vector3f pos);
-  void setRot(Eigen::Vector3f rot);
-  void setUp(Eigen::Vector3f up);
-  void setTargetPos(Eigen::Vector3f target_pos);
+  void setPos(const Eigen::Vector3f& pos);
+  void setRot(const Eigen::Vector3f& rot);
+  void setUp(const Eigen::Vector3f& up);
+  void setTargetPos(const Eigen::Vector3f& target_pos);
   
   void setFovy(float fovy);
   void setAspect(float aspect);
   void setNear(float near);
   void setFar(float far);
 
-  Eigen::Vector3f getPos();
-  Eigen::Vector3f getRot();
-  Eigen::Vector3f getUp();
-  Eigen::Vector3f getTargetPos();
+  Eigen::Vector3f getPos() const;
+  Eigen::Vector3f getRot() const;
+  Eigen::Vector3f getUp() const;
+  Eigen::Vector3f getTargetPos() const;
 
-  float getFovy();
-  float getAspect();
-  float getNear();
-  float getFar();
+  float getFovy() const;
+  float getAspect() const;
+  float getNear() const;
+  float getFar() const;
 };
