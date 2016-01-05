@@ -40,3 +40,13 @@ void Camera::perspTrans() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
+
+void Camera::translate() {
+  glTranslatef(-pos.x(), -pos.y(), -pos.z());
+}
+
+void Camera::rotation() {
+  glRotatef(-rot.x(), 1.0f, 0.0f, 0.0f);
+  glRotatef(-rot.y(), 0.0f, 1.0f, 0.0f);
+  glRotatef(-rot.z(), 0.0f, 0.0f, 1.0f);
+}

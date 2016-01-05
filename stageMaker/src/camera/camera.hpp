@@ -22,7 +22,7 @@ private:
   void perspTrans();
 
   void translate();
-  void rotate();
+  void rotation();
 
 public:
   Camera() = default;
