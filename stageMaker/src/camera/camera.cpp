@@ -50,3 +50,28 @@ void Camera::rotation() {
   glRotatef(-rot.y(), 0.0f, 1.0f, 0.0f);
   glRotatef(-rot.z(), 0.0f, 0.0f, 1.0f);
 }
+
+Eigen::Matrix4f Camera::lookAt() {
+  Eigen::Vector3f a  = pos - target_pos;
+  Eigen::Vector3f z_ = a / a.norm();
+
+  Eigen::Vector3f b  = up.cross(z_);
+  Eigen::Vector3f x_ = b / b.norm();
+
+  Eigen::Vector3f y_ = z_.cross(x_);
+
+  Eigen::Matrix4f R;
+  R << x_.x(), x_.y(), x_.z(), 0.0f,
+       y_.x(), y_.y(), y_.z(), 0.0f,
+       z_.x(), z_.y(), z_.z(), 0.0f,
+         0.0f,   0.0f,   0.0f, 1.0f;
+
+  Eigen::Matrix4f T;
+  T << 1.0f, 0.0f, 0.0f, -pos.x(),
+       0.0f, 1.0f, 0.0f, -pos.y(),
+       0.0f, 0.0f, 1.0f, -pos.z(),
+       0.0f, 0.0f, 0.0f,     1.0f;
+  
+  return R * T;
+}
+
