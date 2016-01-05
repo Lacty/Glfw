@@ -41,7 +41,7 @@ void Camera::perspTrans() {
   glLoadIdentity();
 }
 
-void Camera::translate() {
+void Camera::translation() {
   glTranslatef(-pos.x(), -pos.y(), -pos.z());
 }
 

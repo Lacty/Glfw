@@ -21,7 +21,7 @@ private:
 
   void perspTrans();
 
-  void translate();
+  void translation();
   void rotation();
 
 public:
