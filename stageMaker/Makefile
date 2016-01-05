@@ -4,7 +4,7 @@ maker   = debug/maker.o
 program = debug/program.out
 objs    = $(main) $(maker)
 
-libs    = -lglfw -lGL
+libs    = -lglfw -lGL -lftgl
 cmpopt  = -Wall -std=c++14
 
 $(program): $(objs)
