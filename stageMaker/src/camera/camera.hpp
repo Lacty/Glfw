@@ -16,10 +16,10 @@ private:
   float near;
   float far;
 
-  void perspView(float fovy,
-                 float aspect,
-                 float near,
-                 float far);
+  Eigen::Matrix4f perspView(float fovy,
+                            float aspect,
+                            float near,
+                            float far);
   
   void perspTrans();
 
@@ -27,7 +27,9 @@ private:
   void rotate();
 
 public:
-  Camera();
+  Camera() = default;
+  Camera(Eigen::Vector3f pos,
+         Eigen::Vector3f target_pos);
 
   void update();
 
