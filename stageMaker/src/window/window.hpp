@@ -12,8 +12,8 @@ static int HEIGHT;
 
 void setWindowSize(int width, int height);
 
-int getWindowWidth() const;
+int getWindowWidth();
 
-int getWindowHeight() const;
+int getWindowHeight();
 
-float getWindowAspect() const;
+float getWindowAspect();

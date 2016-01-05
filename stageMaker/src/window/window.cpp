@@ -7,14 +7,14 @@ void setWindowSize(int width, int height) {
   window::HEIGHT = height;
 }
 
-int getWindowWidth() const {
+int getWindowWidth() {
   return window::WIDTH;
 }
 
-int getWindowHeight() const {
+int getWindowHeight() {
   return window::HEIGHT;
 }
 
-float getWindowAspect() const {
+float getWindowAspect() {
   return getWindowWidth() / float(getWindowHeight());
 }
