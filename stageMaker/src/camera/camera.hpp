@@ -16,11 +16,9 @@ private:
   float near;
   float far;
 
-  Eigen::Matrix4f perspView(float fovy,
-                            float aspect,
-                            float near,
-                            float far);
-  
+  Eigen::Matrix4f perspView();
+  Eigen::Matrix4f lookAt();
+
   void perspTrans();
 
   void translate();

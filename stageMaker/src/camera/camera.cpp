@@ -16,11 +16,7 @@ near(0.5f),
 far(50.0f) {}
 
 
-Eigen::Matrix4f Camera::perspView(float fovy,
-                                  float aspect,
-                                  float near,
-                                  float far)
-{
+Eigen::Matrix4f Camera::perspView() {
   float f = 1 / std::tan(toRadians(fovy) * 0.5f);
   float g = -((far + near) / (far - near));
   float h = -((2 * far * near) / (far - near));
@@ -39,8 +35,7 @@ void Camera::perspTrans() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  Eigen::Matrix4f m = perspView(fovy, aspect, near, far);
-  glMultMatrixf(m.data());
+  glMultMatrixf(perspView().data());
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
