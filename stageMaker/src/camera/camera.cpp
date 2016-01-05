@@ -1,6 +1,7 @@
 
 #include "camera.hpp"
 #include "../utility/utility.hpp"
+#include "../window/window.hpp"
 #include <GLFW/glfw3.h>
 
 
@@ -11,7 +12,6 @@ rot(0.0f, 0.0f, 0.0f),
 up(0.0f, 1.0f, 0.0f),
 target_pos(target_pos),
 fovy(35.0f),
-aspect(1.333f),
 near(0.5f),
 far(50.0f) {}
 
@@ -20,7 +20,7 @@ Eigen::Matrix4f Camera::perspView() {
   float f = 1 / std::tan(toRadians(fovy) * 0.5f);
   float g = -((far + near) / (far - near));
   float h = -((2 * far * near) / (far - near));
-  float i = f / aspect;
+  float i = f / getWindowAspect();
 
   Eigen::Matrix4f m;
   m <<    i,  0.0f,  0.0f,  0.0f,
@@ -106,10 +106,6 @@ void Camera::setFovy(float fovy) {
   this->fovy = fovy;
 }
 
-void Camera::setAspect(float aspect) {
-  this->aspect = aspect;
-}
-
 void Camera::setNear(float near) {
   this->near = near;
 }
@@ -138,10 +134,6 @@ Eigen::Vector3f Camera::getTargetPos() const {
 
 float Camera::getFovy() const {
   return fovy;
-}
-
-float Camera::getAspect() const {
-  return aspect;
 }
 
 float Camera::getNear() const {

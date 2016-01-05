@@ -12,7 +12,6 @@ private:
   Eigen::Vector3f target_pos;
 
   float fovy;
-  float aspect;
   float near;
   float far;
 
@@ -37,7 +36,6 @@ public:
   void setTargetPos(const Eigen::Vector3f& target_pos);
   
   void setFovy(float fovy);
-  void setAspect(float aspect);
   void setNear(float near);
   void setFar(float far);
 
@@ -47,7 +45,6 @@ public:
   Eigen::Vector3f getTargetPos() const;
 
   float getFovy() const;
-  float getAspect() const;
   float getNear() const;
   float getFar() const;
 };
