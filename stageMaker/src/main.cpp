@@ -40,6 +40,7 @@ auto main()->int {
   camera.setFar(50.0f);
 
   Mouse mouse;
+  Key key;
 
   while (!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
@@ -47,6 +48,7 @@ auto main()->int {
 
     camera.update();
     mouse.update(window);
+    key.update(window);
 
     GLfloat vtx[] = { 0.0f, 0.0f };
 

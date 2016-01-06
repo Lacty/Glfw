@@ -22,7 +22,7 @@ void Mouse::update(GLFWwindow* window) {
 
   // Button
   left  = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-  right = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  right = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 
   char _press = 0;
   if (left  == GLFW_PRESS) _press |= Button::Left;
