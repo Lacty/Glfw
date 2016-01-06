@@ -7,6 +7,7 @@
 #include "camera/camera.hpp"
 #include "window/window.hpp"
 #include "maker/maker.hpp"
+#include "input/input.hpp"
 
 
 void resize(GLFWwindow* window,
@@ -32,9 +33,29 @@ auto main()->int {
   glfwMakeContextCurrent(window);
   glfwSetWindowSizeCallback(window, resize);
 
+
+  Camera camera({{ 0.0f, 0.0f,   0.0f },
+                 { 0.0f, 0.0f, -10.0f }});
+  camera.setNear(0.5f);
+  camera.setFar(50.0f);
+
+  Mouse mouse;
+
   while (!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    camera.update();
+    mouse.update(window);
+
+    GLfloat vtx[] = { 0.0f, 0.0f };
+
+    glTranslatef(0.0f, 0.0f, -10.0f);
+    glPointSize(50);
+    glVertexPointer(2, GL_FLOAT, 0, vtx);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDrawArrays(GL_POINTS, 0, 1);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

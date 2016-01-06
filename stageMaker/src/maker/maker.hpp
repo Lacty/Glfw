@@ -1,6 +1,9 @@
 
 #pragma once
-#include <iostream>
 
 
-void show();
+class Maker {
+private:
+public:
+  Maker();
+};
