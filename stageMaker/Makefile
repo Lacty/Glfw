@@ -5,10 +5,11 @@ window  = debug/window.o
 camera  = debug/camera.o
 mouse   = debug/mouse.o
 key     = debug/key.o
+loader  = debug/loader.o
 utility = debug/utility.o
 
 program = debug/program.out
-objs    = $(main) $(maker) $(window) $(camera) $(mouse) $(key) $(utility)
+objs    = $(main) $(maker) $(window) $(camera) $(mouse) $(key) $(loader) $(utility)
 
 libs    = -lglfw -lGL -lftgl
 cmpopt  = -Wall -std=c++14
@@ -32,6 +33,9 @@ $(mouse): src/input/mouse.cpp
 	g++ $(cmpopt) $(libs) -c $^ -o $@
 
 $(key): src/input/key.cpp
+	g++ $(cmpopt) $(libs) -c $^ -o $@
+
+$(loader): src/loader/loader.cpp
 	g++ $(cmpopt) $(libs) -c $^ -o $@
 
 $(utility): src/utility/utility.cpp
