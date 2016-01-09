@@ -14,8 +14,9 @@ void Loader::load() {
 
   // load
   f.open(path.c_str(), std::ios::binary);
-  if (!f) {
+  if (!f.is_open()) {
     std::cout << "file not opened" << std::endl;
+    exit(1);
   }
 
   // convert to stringstream
@@ -24,11 +25,12 @@ void Loader::load() {
 
   picojson::value v;
   ss >> v;
-
+  
   auto obj = v.get<picojson::object>();
   
   // extraction "vertex"
   auto array = obj["vertex"].get<picojson::array>();
+  
 
   vtx.clear();
   for (auto it : array) {

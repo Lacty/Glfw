@@ -8,6 +8,7 @@
 #include "window/window.hpp"
 #include "maker/maker.hpp"
 #include "input/input.hpp"
+#include "loader/loader.hpp"
 
 
 void resize(GLFWwindow* window,
@@ -39,8 +40,15 @@ auto main()->int {
   camera.setNear(0.5f);
   camera.setFar(50.0f);
 
-  Mouse mouse;
-  Key key;
+  Mouse  mouse;
+  Key    key;
+  Loader loader("assets/stage.json");
+  loader.load();
+
+  std::vector<GLfloat> vtx(loader.getVtx());
+  for (auto& it : vtx) {
+    std::cout << "vtx = " << it << std::endl;
+  }
 
   while (!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
