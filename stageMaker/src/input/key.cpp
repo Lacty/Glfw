@@ -15,6 +15,7 @@ void Key::update(GLFWwindow* window) {
   int key_d = glfwGetKey(window, GLFW_KEY_D);
   int key_z = glfwGetKey(window, GLFW_KEY_Z);
   int key_x = glfwGetKey(window, GLFW_KEY_X);
+  int key_e = glfwGetKey(window, GLFW_KEY_E);
   int key_esc = glfwGetKey(window, GLFW_KEY_ESCAPE);
   
   char _press = 0;
@@ -24,6 +25,7 @@ void Key::update(GLFWwindow* window) {
   if (key_d == GLFW_PRESS) _press |= Keys::D;
   if (key_z == GLFW_PRESS) _press |= Keys::Z;
   if (key_x == GLFW_PRESS) _press |= Keys::X;
+  if (key_e == GLFW_PRESS) _press |= Keys::E;
   if (key_esc == GLFW_PRESS) _press |= Keys::Esc;
 
   push  = _press & ~press;

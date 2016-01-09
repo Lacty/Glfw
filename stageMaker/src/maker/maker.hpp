@@ -20,10 +20,17 @@ private:
   std::vector<GLfloat> stage_vertex;
   int                  editing_index;
 
+  void changeVtx();
+  void save();
+  void changeMode();
+
 public:
   Maker() = default;
   Maker(const std::string& path,
         Camera& camera,
         Mouse& mouse,
         Key& key);
+  
+  void update();
+  void draw();
 };

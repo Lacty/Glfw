@@ -80,8 +80,8 @@ void Camera::lookAt() {
 void Camera::update() {
   perspTrans();
   lookAt();
-  rotation();
   translation();
+  rotation();
 }
 
 

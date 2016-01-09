@@ -10,7 +10,8 @@ enum Keys {
   D = 1 << 3,
   Z = 1 << 4,
   X = 1 << 5,
-  Esc = 1 << 6
+  E = 1 << 6,
+  Esc = 1 << 7
 };
 
 class Key {

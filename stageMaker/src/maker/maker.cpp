@@ -21,3 +21,8 @@ loader(path)
   stage_vertex  = loader.getVtx();
   editing_index = stage_vertex.size();
 }
+
+
+void Maker::update() {}
+
+void Maker::draw() {}
