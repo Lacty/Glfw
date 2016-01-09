@@ -84,6 +84,10 @@ void Camera::update() {
   rotation();
 }
 
+void Camera::moveVector(float x, float y, float z) {
+  Eigen::Matrix4f mat = rotMatrix(rot.x(), rot.y(), rot.z())
+                          * transMatrix(x, y, z);
+}
 
 // setter ---
 void Camera::setPos(const Eigen::Vector3f& pos) {
