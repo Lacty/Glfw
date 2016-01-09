@@ -4,6 +4,8 @@
 #include "../window/window.hpp"
 #include <GLFW/glfw3.h>
 
+#include <iostream>
+
 
 Camera::Camera(Eigen::Vector3f pos,
                Eigen::Vector3f target_pos) :
@@ -80,13 +82,21 @@ void Camera::lookAt() {
 void Camera::update() {
   perspTrans();
   lookAt();
-  translation();
   rotation();
+  translation();
 }
 
 void Camera::moveVector(float x, float y, float z) {
-  Eigen::Matrix4f mat = rotMatrix(rot.x(), rot.y(), rot.z())
+  Eigen::Matrix4f mat = transMatrix(pos.x(), pos.y(), pos.z())
+                          * rotMatrix(rot.x(), rot.y(), rot.z())
                           * transMatrix(x, y, z);
+
+  pos.x() = mat(0, 3);
+  pos.y() = mat(1, 3);
+  pos.z() = mat(2, 3);
+
+  std::cout << pos << std::endl;
+  std::cout << target_pos << std::endl;
 }
 
 // setter ---

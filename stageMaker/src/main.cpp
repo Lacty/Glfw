@@ -54,40 +54,77 @@ auto main()->int {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    
+    {// UI ---
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glPushMatrix();
+    GLfloat vtx1[] = {
+      0.0f, 0.433f, 0.0f,
+      -0.5f, -0.433f, 0.0f,
+      0.5f, -0.433f, 0.0f
+    };
+    
+    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+    glTranslatef(0.8f, 0.5f, 0.0f);
+    glScalef(0.03f, 0.03f, 0.03f);
+    glTranslatef(-camera.getPos().x(),
+                 -camera.getPos().z(),
+                 0.0f);
+
+    glRotatef(camera.getRot().y(), 0.0f, 0.0f, 1.0f);
+
+    glVertexPointer(3, GL_FLOAT, 0, vtx1);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    glPopMatrix();
+    }// --- UI
+    
+
+    glPushMatrix();
     camera.update();
     mouse.update(window);
     key.update(window);
 
     if (key.isPress(Keys::A)) {
-      angle += 0.1f;
+      camera.moveVector(1, 0, 0);
     } else if (key.isPress(Keys::D)) {
-      angle -= 0.1f;
+      camera.moveVector(-1, 0, 0);
     }
     if (key.isPress(Keys::Z)) {
-      rotate += 0.1f;
+      rotate += 2.1f;
     } else if (key.isPress(Keys::X)) {
       rotate -= 0.1f;
     }
 
-    std::cout << "camera pos\n" << camera.getPos() << std::endl;
-    std::cout << "camera rot\n" << camera.getRot() << std::endl;
-
-    camera.setPos(Eigen::Vector3f(angle, 0.0f, 0.0f));
-    camera.setTargetPos(Eigen::Vector3f(angle, 0.0f, -10.0f));
     camera.setRot(Eigen::Vector3f(0.0f, rotate, 0.0f));
 
-    GLdouble modelMatrix[4*4];
-    glGetDoublev(GL_MODELVIEW_MATRIX, modelMatrix);
+   
+    // Draw ---
+    glPushMatrix();
+    GLfloat vtx[] = {
+      0.0f, 0.433f, 0.0f,
+      -0.5f, -0.433f, 0.0f,
+      0.5f, -0.433f, 0.0f
+    };
 
-    GLfloat vtx[] = { 0.0f, 0.0f, -10.0f };
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glTranslatef(0.0f, 0.0f, -10.0f);
 
     glPointSize(50);
     glVertexPointer(3, GL_FLOAT, 0, vtx);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glDrawArrays(GL_POINTS, 0, 1);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     glDisableClientState(GL_VERTEX_ARRAY);
+    
+    glPopMatrix();
+    // --- Draw
 
-    glMultMatrixd(modelMatrix);
+    glPopMatrix();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
