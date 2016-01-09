@@ -1,7 +1,23 @@
 
 #include "maker.hpp"
+#include "../camera/camera.hpp"
+#include "../input/mouse.hpp"
+#include "../input/key.hpp"
 
 
-void show() {
-  std::cout << "aa" << std::endl;
+Maker::Maker(const std::string& path,
+             Camera& camera,
+             Mouse& mouse,
+             Key& key) :
+camera(camera),
+mouse(mouse),
+key(key),
+loader(path)
+{
+  std::cout << "create Maker" << std::endl;
+
+  loader.load();
+
+  stage_vertex  = loader.getVtx();
+  editing_index = stage_vertex.size();
 }

@@ -11,6 +11,7 @@ private:
   std::vector<GLfloat> vtx;
 
 public:
+  Loader() = default;
   Loader(const std::string& path);
 
   void load();

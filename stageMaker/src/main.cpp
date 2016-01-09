@@ -8,7 +8,6 @@
 #include "window/window.hpp"
 #include "maker/maker.hpp"
 #include "input/input.hpp"
-#include "loader/loader.hpp"
 
 
 void resize(GLFWwindow* window,
@@ -16,6 +15,10 @@ void resize(GLFWwindow* window,
             const int height)
 {
   setWindowSize(width, height);
+}
+
+bool isOpen(GLFWwindow* window, const Key& key) {
+  return !glfwWindowShouldClose(window) && !key.isPush(Keys::Esc);
 }
 
 auto main()->int {
@@ -42,15 +45,9 @@ auto main()->int {
 
   Mouse  mouse;
   Key    key;
-  Loader loader("assets/stage.json");
-  loader.load();
+  Maker  maker("assets/stage.json", camera, mouse, key);
 
-  std::vector<GLfloat> vtx(loader.getVtx());
-  for (auto& it : vtx) {
-    std::cout << "vtx = " << it << std::endl;
-  }
-
-  while (!glfwWindowShouldClose(window)) {
+  while (isOpen(window, key)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
