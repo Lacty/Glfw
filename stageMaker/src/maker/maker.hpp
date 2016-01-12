@@ -12,6 +12,12 @@ class Key;
 
 class Maker {
 private:
+  enum Mode {
+    EditVtx,
+    MoveCam,
+    SelectVtx
+  } mode;
+
   Camera& camera;
   Mouse&  mouse;
   Key&    key;
@@ -23,6 +29,8 @@ private:
   void changeVtx();
   void save();
   void changeMode();
+
+  void drawUI();
 
 public:
   Maker() = default;

@@ -22,6 +22,13 @@ loader(path)
   editing_index = stage_vertex.size();
 }
 
+void Maker::changeVtx() {}
+
+void Maker::save() {}
+
+void Maker::changeMode() {} 
+
+void Maker::drawUI() {}
 
 void Maker::update() {}
 
