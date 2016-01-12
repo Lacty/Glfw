@@ -26,9 +26,12 @@ private:
   std::vector<GLfloat> stage_vertex;
   int                  editing_index;
 
-  void changeVtx();
+  void changeVtx(int d);
   void save();
   void changeMode();
+
+  void rotateCam(GLFWwindow* window);
+  void transCam();
 
   void drawUI();
 
@@ -39,6 +42,6 @@ public:
         Mouse& mouse,
         Key& key);
   
-  void update();
+  void update(GLFWwindow* window);
   void draw();
 };

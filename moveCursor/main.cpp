@@ -27,7 +27,7 @@ int main() {
       break;
     }
 
-    glfwSetCursorPos(window, 0.0f, 0.0f);
+    glfwSetCursorPos(window, 30.0f, 60.0f);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
