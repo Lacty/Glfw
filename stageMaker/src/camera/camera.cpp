@@ -82,21 +82,32 @@ void Camera::lookAt() {
 void Camera::update() {
   perspTrans();
   lookAt();
-  rotation();
-  translation();
+  //rotation();
+  //translation();
 }
 
-void Camera::moveVector(float x, float y, float z) {
+void Camera::moveVector(const Eigen::Vector3f& vector,
+                        const Eigen::Vector3f& rotate)
+{
+  rot.x() -= rotate.x();
+  rot.y() -= rotate.y();
+  rot.z() -= rotate.z();
+
   Eigen::Matrix4f mat = transMatrix(pos.x(), pos.y(), pos.z())
-                          * rotMatrix(rot.x(), rot.y(), rot.z())
-                          * transMatrix(x, y, z);
+                          * rotMatrix(toRadians(rot.x()), toRadians(rot.y()), toRadians(rot.z()))
+                          * transMatrix(vector.x(), vector.y(), vector.z());
 
   pos.x() = mat(0, 3);
   pos.y() = mat(1, 3);
   pos.z() = mat(2, 3);
+  
+  mat = transMatrix(pos.x(), pos.y(), pos.z())
+          * rotMatrix(toRadians(rot.x()), toRadians(rot.y()), toRadians(rot.z()))
+          * transMatrix(0, 0, -10);
 
-  std::cout << pos << std::endl;
-  std::cout << target_pos << std::endl;
+  target_pos.x() = mat(0, 3);
+  target_pos.y() = mat(1, 3);
+  target_pos.z() = mat(2, 3);
 }
 
 // setter ---

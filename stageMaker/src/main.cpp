@@ -67,19 +67,53 @@ auto main()->int {
       0.5f, -0.433f, 0.0f
     };
     
-    glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
     glTranslatef(0.8f, 0.5f, 0.0f);
     glScalef(0.03f, 0.03f, 0.03f);
-    glTranslatef(-camera.getPos().x(),
-                 -camera.getPos().z(),
-                 0.0f);
+    
+    {
+      glPushMatrix();
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+      glTranslatef(0.0f, 10.0f, 0.0f);
+      glVertexPointer(3, GL_FLOAT, 0, vtx1);
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glDrawArrays(GL_TRIANGLES, 0, 3);
+      glDisableClientState(GL_VERTEX_ARRAY);
+      glPopMatrix();
+    }
 
-    glRotatef(camera.getRot().y(), 0.0f, 0.0f, 1.0f);
+    { // eye
+      glPushMatrix();
+      glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+      glTranslatef(camera.getPos().x(),
+                   -camera.getPos().z(),
+                   0.0f);
 
-    glVertexPointer(3, GL_FLOAT, 0, vtx1);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableClientState(GL_VERTEX_ARRAY);
+      glRotatef(camera.getRot().y(), 0.0f, 0.0f, 1.0f);
+
+      glVertexPointer(3, GL_FLOAT, 0, vtx1);
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glDrawArrays(GL_TRIANGLES, 0, 3);
+      glDisableClientState(GL_VERTEX_ARRAY);
+      glPopMatrix();
+    }
+
+    // target
+    {
+      glPushMatrix();
+      glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+      glTranslatef(camera.getPos().x(),
+                   -camera.getPos().z(),
+                   0.0f);
+
+      glRotatef(camera.getRot().y(), 0.0f, 0.0f, 1.0f);
+      glTranslatef(0.0f, 10.0f, 0.f);
+
+      glVertexPointer(3, GL_FLOAT, 0, vtx1);
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glDrawArrays(GL_TRIANGLES, 0, 3);
+      glDisableClientState(GL_VERTEX_ARRAY);
+      glPopMatrix();
+    }
 
     glPopMatrix();
     }// --- UI
@@ -90,22 +124,36 @@ auto main()->int {
     mouse.update(window);
     key.update(window);
 
+    // translate
     if (key.isPress(Keys::A)) {
-      camera.moveVector(1, 0, 0);
-    } else if (key.isPress(Keys::D)) {
-      camera.moveVector(-1, 0, 0);
+      camera.moveVector(Eigen::Vector3f(-0.2f, 0.0f, 0.0f),
+                        Eigen::Vector3f(0.0f, 0.0f, 0.0f));
     }
+    else if (key.isPress(Keys::D)) {
+      camera.moveVector(Eigen::Vector3f(0.2f, 0.0f, 0.0f),
+                        Eigen::Vector3f(0.0f, 0.0f, 0.0f));
+    }
+    else if (key.isPress(Keys::W)) {
+      camera.moveVector(Eigen::Vector3f(0.0f, 0.0f, -0.2f),
+                        Eigen::Vector3f(0.0f, 0.0f, 0.0f));
+    }
+    else if (key.isPress(Keys::S)) {
+      camera.moveVector(Eigen::Vector3f(0.0f, 0.0f, 0.2f),
+                        Eigen::Vector3f(0.0f, 0.0f, 0.0f));
+    }
+    
+    // rotate
     if (key.isPress(Keys::Z)) {
-      rotate += 2.1f;
-    } else if (key.isPress(Keys::X)) {
-      rotate -= 0.1f;
+      camera.moveVector(Eigen::Vector3f(0.0f, 0.0f, 0.0f),
+                        Eigen::Vector3f(0.0f, -0.2f, 0.0f));
     }
-
-    camera.setRot(Eigen::Vector3f(0.0f, rotate, 0.0f));
+    else if (key.isPress(Keys::X)) {
+      camera.moveVector(Eigen::Vector3f(0.0f, 0.0f, 0.0f),
+                        Eigen::Vector3f(0.0f, 0.2f, 0.0f));
+    }
 
    
     // Draw ---
-    glPushMatrix();
     GLfloat vtx[] = {
       0.0f, 0.433f, 0.0f,
       -0.5f, -0.433f, 0.0f,
@@ -120,8 +168,6 @@ auto main()->int {
     glEnableClientState(GL_VERTEX_ARRAY);
     glDrawArrays(GL_TRIANGLES, 0, 3);
     glDisableClientState(GL_VERTEX_ARRAY);
-    
-    glPopMatrix();
     // --- Draw
 
     glPopMatrix();

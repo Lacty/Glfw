@@ -30,7 +30,8 @@ public:
 
   void update();
 
-  void moveVector(float x, float y, float z);
+  void moveVector(const Eigen::Vector3f& vector,
+                  const Eigen::Vector3f& rotate);
 
   void setPos(const Eigen::Vector3f& pos);
   void setRot(const Eigen::Vector3f& rot);
