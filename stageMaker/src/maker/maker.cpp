@@ -43,8 +43,19 @@ void Maker::changeMode() {
 }
 
 void Maker::rotateCam(GLFWwindow* window) {
-  Eigen::Vector3f rot;
+  Eigen::Vector3d center(getWindowWidth() * 0.5,
+                         getWindowHeight() * 0.5,
+                         0.0);
+  Eigen::Vector3f rot(0.0, 0.0, 0.0);
   
+  std::cout << mouse.getPos() << std::endl;
+
+  rot.x() += -mouse.getPos().y() * 0.01f;
+  rot.y() += mouse.getPos().x() * 0.01f;
+  rot.z() = 0.0f;
+
+  camera.moveVector(Eigen::Vector3f(0, 0, 0), rot);
+
   glfwSetCursorPos(window,
                    getWindowWidth() * 0.5,
                    getWindowHeight() * 0.5);
@@ -69,4 +80,18 @@ void Maker::update(GLFWwindow* window) {
   rotateCam(window);
 }
 
-void Maker::draw() {}
+void Maker::draw() {
+  GLfloat vtx[] = {
+      0.0f, 0.433f,
+      -0.5f, -0.433f,
+      0.5f, -0.433f
+  };
+
+  glTranslatef(0.0f, 0.0f, -10.0f);
+  glVertexPointer(2, GL_FLOAT, 0, vtx);
+  glEnableClientState(GL_VERTEX_ARRAY);
+
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+}

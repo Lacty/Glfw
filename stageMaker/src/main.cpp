@@ -57,14 +57,14 @@ auto main()->int {
     glClear(GL_COLOR_BUFFER_BIT);
 
     initMatrix();
-   
-    maker.update(window);
-    maker.draw();
 
     camera.update();
     mouse.update(window);
     key.update(window);
 
+    maker.update(window);
+    maker.draw();
+    
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
