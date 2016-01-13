@@ -1,9 +1,9 @@
-
 #pragma once
 #include <GLFW/glfw3.h>
 #include <FTGL/ftgl.h>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "../loader/loader.hpp"
 
 
@@ -23,6 +23,10 @@ private:
   Mouse&  mouse;
   Key&    key;
   Loader  loader;
+
+  std::vector<std::string> ref_edit;
+  std::vector<std::string> ref_move;
+  std::vector<std::string> ref_sele;
 
   std::vector<GLfloat> stage_vertex;
   int                  editing_index;

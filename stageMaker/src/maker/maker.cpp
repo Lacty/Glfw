@@ -26,6 +26,19 @@ font("assets/rounded-l-mplus-1c-regular.ttf")
   stage_vertex  = loader.getVtx();
   editing_index = stage_vertex.size();
 
+  ref_edit.push_back("W: ");
+
+  ref_move.push_back("W: go forward");
+  ref_move.push_back("S: go back");
+  ref_move.push_back("A: go left");
+  ref_move.push_back("D: go right");
+  ref_move.push_back("X: go up");
+  ref_move.push_back("Z: go down");
+
+  ref_sele.push_back("D: next");
+  ref_sele.push_back("A: back");
+  ref_sele.push_back("S: save");
+
   if (font.Error()) {
     std::cout << "missing .ttf load\n";
     exit(1);
@@ -132,4 +145,29 @@ void Maker::drawUI() {
   font.FaceSize(size);
   font.Render(str_mode.c_str(), str_mode.size(),
               FTPoint(0, top - size, 0));
+
+  int i = 0;
+  int offset = size + 15;
+  size = 15;
+  font.FaceSize(size);
+  switch (mode) {
+    case EditVtx:
+      for (auto it : ref_edit) {
+        font.Render(it.c_str(), it.size(),
+                    FTPoint(0, top - offset - size * i, 0));
+        ++i;
+      } break;
+    case MoveCam:
+      for (auto it : ref_move) {
+        font.Render(it.c_str(), it.size(),
+                    FTPoint(0, top - offset - size * i, 0));
+        ++i;
+      } break;
+    case SelectVtx:
+      for (auto it : ref_sele) {
+        font.Render(it.c_str(), it.size(),
+                    FTPoint(0, top - offset - size * i, 0));
+        ++i;
+      } break;
+  }
 }
