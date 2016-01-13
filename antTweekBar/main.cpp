@@ -18,13 +18,18 @@ int main() {
 
   // TweakBar ---
   TwInit(TW_OPENGL, nullptr);
+  TwWindowSize(200, 300);
   TwBar* twBar;
   twBar = TwNewBar("tweak bar");
-  TwAddVarRW();
+
+  bool b = false;
+  TwAddVarRW(twBar, "tweak bar", TW_TYPE_BOOLCPP, &b, "");
 
   while (!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    TwDraw();
 
     glfwSwapBuffers(window);
     glfwPollEvents();
