@@ -11,8 +11,9 @@ utility = debug/utility.o
 program = debug/program.out
 objs    = $(main) $(maker) $(window) $(camera) $(mouse) $(key) $(loader) $(utility)
 
-libs    = -lglfw -lGL -lftgl
-cmpopt  = -Wall -std=c++14
+freetype = -I/usr/include/freetype2
+libs     = -lglfw -lGL -lftgl $(freetype)
+cmpopt   = -Wall -std=c++14
 
 $(program): $(objs)
 	g++ $(cmpopt) $(libs) $^ -o $@

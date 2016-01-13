@@ -15,7 +15,8 @@ Maker::Maker(const std::string& path,
 camera(camera),
 mouse(mouse),
 key(key),
-loader(path)
+loader(path),
+font("assets/rounded-l-mplus-1c-regular.ttf")
 {
   std::cout << "create Maker" << std::endl;
 
@@ -23,6 +24,11 @@ loader(path)
 
   stage_vertex  = loader.getVtx();
   editing_index = stage_vertex.size();
+
+  if (font.Error()) {
+    std::cout << "missing .ttf load\n";
+    exit(1);
+  }
 }
 
 void Maker::changeVtx(int d) {
@@ -74,8 +80,6 @@ void Maker::transCam() {
   camera.moveVector(vec, Eigen::Vector3f(0, 0, 0));
 }
 
-void Maker::drawUI() {}
-
 void Maker::update(GLFWwindow* window) {
   rotateCam(window);
 }
@@ -94,4 +98,10 @@ void Maker::draw() {
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
   glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void Maker::drawUI() {
+  FTPoint pos(0, 0, 0);
+  font.FaceSize(100);
+  font.Render("UI", 2, pos);
 }

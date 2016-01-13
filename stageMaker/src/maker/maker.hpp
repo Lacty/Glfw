@@ -1,8 +1,9 @@
 
 #pragma once
-#include <string>
 #include <GLFW/glfw3.h>
+#include <FTGL/ftgl.h>
 #include <vector>
+#include <string>
 #include "../loader/loader.hpp"
 
 
@@ -26,14 +27,14 @@ private:
   std::vector<GLfloat> stage_vertex;
   int                  editing_index;
 
+  FTPixmapFont font;
+
   void changeVtx(int d);
   void save();
   void changeMode();
 
   void rotateCam(GLFWwindow* window);
   void transCam();
-
-  void drawUI();
 
 public:
   Maker() = default;
@@ -44,4 +45,5 @@ public:
   
   void update(GLFWwindow* window);
   void draw();
+  void drawUI();
 };

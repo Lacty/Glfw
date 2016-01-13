@@ -58,6 +58,8 @@ auto main()->int {
 
     initMatrix();
 
+    maker.drawUI();
+
     camera.update();
     mouse.update(window);
     key.update(window);
