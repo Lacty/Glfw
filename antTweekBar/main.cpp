@@ -16,6 +16,12 @@ int main() {
 
   glfwMakeContextCurrent(window);
 
+  // TweakBar ---
+  TwInit(TW_OPENGL, nullptr);
+  TwBar* twBar;
+  twBar = TwNewBar("tweak bar");
+  TwAddVarRW();
+
   while (!glfwWindowShouldClose(window)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
