@@ -36,6 +36,8 @@ private:
   void rotateCam(GLFWwindow* window);
   void transCam();
 
+  std::string modeToStr(Mode mode);
+
 public:
   Maker() = default;
   Maker(const std::string& path,

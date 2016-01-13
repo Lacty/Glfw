@@ -12,6 +12,7 @@ Maker::Maker(const std::string& path,
              Camera& camera,
              Mouse& mouse,
              Key& key) :
+mode(Mode::EditVtx),
 camera(camera),
 mouse(mouse),
 key(key),
@@ -49,15 +50,10 @@ void Maker::changeMode() {
 }
 
 void Maker::rotateCam(GLFWwindow* window) {
-  Eigen::Vector3d center(getWindowWidth() * 0.5,
-                         getWindowHeight() * 0.5,
-                         0.0);
   Eigen::Vector3f rot(0.0, 0.0, 0.0);
-  
-  std::cout << mouse.getPos() << std::endl;
 
   rot.x() += -mouse.getPos().y() * 0.01f;
-  rot.y() += mouse.getPos().x() * 0.01f;
+  rot.y() +=  mouse.getPos().x() * 0.01f;
   rot.z() = 0.0f;
 
   camera.moveVector(Eigen::Vector3f(0, 0, 0), rot);
@@ -69,19 +65,47 @@ void Maker::rotateCam(GLFWwindow* window) {
 
 void Maker::transCam() {
   float speed = 0.2f;
-  Eigen::Vector3f vec;
-  if (key.isPress(Keys::W)) { vec.z() +=  speed; }
-  if (key.isPress(Keys::S)) { vec.z() += -speed; }
+  Eigen::Vector3f vec(0, 0, 0);
+  if (key.isPress(Keys::W)) { vec.z() += -speed; }
+  if (key.isPress(Keys::S)) { vec.z() +=  speed; }
   if (key.isPress(Keys::D)) { vec.x() +=  speed; }
   if (key.isPress(Keys::A)) { vec.x() += -speed; }
-  if (key.isPress(Keys::X)) { vec.y() +=  speed; }
-  if (key.isPress(Keys::Z)) { vec.y() += -speed; }
+  if (key.isPress(Keys::X)) { vec.y() += -speed; }
+  if (key.isPress(Keys::Z)) { vec.y() +=  speed; }
 
   camera.moveVector(vec, Eigen::Vector3f(0, 0, 0));
 }
 
+std::string Maker::modeToStr(Mode mode) {
+  switch (mode) {
+    case EditVtx:
+      return "EditVtx";
+      break;
+    case MoveCam:
+      return "MoveCam";
+      break;
+    case SelectVtx:
+      return "SelectVtx";
+      break;
+  }
+}
+
 void Maker::update(GLFWwindow* window) {
   rotateCam(window);
+  
+  if (key.isPush(Keys::E)) { changeMode(); }
+
+  switch (mode) {
+    case EditVtx:
+      
+      break;
+    case MoveCam:
+      transCam();
+      break;
+    case SelectVtx:
+      
+      break;
+  }
 }
 
 void Maker::draw() {
@@ -101,7 +125,11 @@ void Maker::draw() {
 }
 
 void Maker::drawUI() {
-  FTPoint pos(0, 0, 0);
-  font.FaceSize(100);
-  font.Render("UI", 2, pos);
+  float top  = getWindowHeight();
+  float size = 20;
+  std::string str_mode("MODE: ");
+  str_mode += modeToStr(mode);
+  font.FaceSize(size);
+  font.Render(str_mode.c_str(), str_mode.size(),
+              FTPoint(0, top - size, 0));
 }
