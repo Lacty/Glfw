@@ -11,7 +11,7 @@
 - X11
 
 ## Compile
-- `g++ -std=c++11 <file>.cpp -lglfw -lGL -lftgl libAntTweakBar.a -X11`
+- `g++ -std=c++11 <file>.cpp -lglfw -lGL -lftgl -lAntTweakBar -X11`
 - `./a.out` to run
 
 # Makefile
