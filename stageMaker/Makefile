@@ -12,7 +12,7 @@ program = debug/program.out
 objs    = $(main) $(maker) $(window) $(camera) $(mouse) $(key) $(loader) $(utility)
 
 freetype = -I/usr/include/freetype2
-libs     = -lglfw -lGL -lftgl $(freetype)
+libs     = -lglfw -lGL -lftgl -lAntTweakBar -lX11 $(freetype)
 cmpopt   = -Wall -std=c++14
 
 $(program): $(objs)
