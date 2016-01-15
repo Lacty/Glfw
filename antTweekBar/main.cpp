@@ -17,15 +17,23 @@ int main() {
   glfwMakeContextCurrent(window);
 
   // TweakBar ---
-  TwInit(TW_OPENGL, nullptr);
-  TwWindowSize(200, 300);
+  TwInit(TW_OPENGL, NULL);
+  TwWindowSize(640, 480);
   TwBar* twBar;
   twBar = TwNewBar("tweak bar");
 
-  bool b = false;
-  TwAddVarRW(twBar, "tweak bar", TW_TYPE_BOOLCPP, &b, "");
+  bool b = true;
+  TwAddVarRW(twBar, "b", TW_TYPE_BOOLCPP, &b, "");
 
-  while (!glfwWindowShouldClose(window)) {
+  float vec[3] = { 1, 2, 3 };
+  TwAddVarRW(twBar, "vec", TW_TYPE_DIR3F, &vec, "");
+
+  glfwSetMouseButtonCallback(window, (GLFWmousebuttonfun)TwEventMouseButtonGLFW);
+  glfwSetKeyCallback(window, (GLFWkeyfun)TwEventKeyGLFW);
+  glfwSetCharCallback(window, (GLFWcharfun)TwEventCharGLFW);
+  glfwSetWindowSizeCallback(window, (GLFWwindowsizefun)TwWindowSize);
+
+  while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
     glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -35,6 +43,7 @@ int main() {
     glfwPollEvents();
   }
 
+  TwTerminate();
   glfwTerminate();
   return 0;
 }
