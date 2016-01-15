@@ -7,9 +7,11 @@
 - freetype2
 - ftgl
 - picojson
+- AntTweakBar
+- X11
 
 ## Compile
-- `g++ -std=c++11 <file>.cpp -lglfw -lGL -lftgl`
+- `g++ -std=c++11 <file>.cpp -lglfw -lGL -lftgl libAntTweakBar.a -X11`
 - `./a.out` to run
 
 # Makefile
