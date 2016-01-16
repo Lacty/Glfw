@@ -1,7 +1,17 @@
 
 #include <iostream>
+#include <GLFW/glfw3.h>
+
+#include "../include/appNative.hpp"
 
 
 int main() {
-  std::cout << "hoge" << std::endl;
+  AppNative native(640, 480, "hoge");
+  
+  native.setClearColor(Color::gray());
+  while (native.isOpen()) {
+    native.clearWindowBuff();
+
+    native.updateEvent();
+  }
 }

@@ -1,16 +1,21 @@
 
-main = debug/main.o
+main   = debug/main.o
+native = debug/native.o
 
 program = debug/program.out
-objs    = $(main)
+objs    = $(main) $(native)
 
-opt = -Wall -std=c++14
+libs = -lglfw -lGL
+opt  = -Wall -std=c++14
 
 $(program): $(objs)
-	g++ $(opt) $^ -o $@
+	g++ $(opt) $(libs) $^ -o $@
 
 $(main): src/main.cpp
-	g++ $(opt) -c $^ -o $@
+	g++ $(opt) $(libs) -c $^ -o $@
+
+$(native): src/appNative.cpp
+	g++ $(opt) $(libs) -c $^ -o $@
 
 run: $(program)
 	$^
