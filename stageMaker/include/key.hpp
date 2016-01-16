@@ -21,9 +21,9 @@ public:
     pull.clear();
   }
 
-  void setKeyPush(int key) { push.insert(key); }
-  void setKeyPull(int key) { pull.insert(key); }
-  void setKeyPress(int key) { press.insert(key); }
+  void setKeyPush(int key) { push.emplace(key); }
+  void setKeyPull(int key) { pull.emplace(key); }
+  void setKeyPress(int key) { press.emplace(key); }
 
   void popKeyPress(int key) { press.erase(press.find(key)); }
   

@@ -5,6 +5,7 @@
 #include "vector.hpp"
 #include "color.hpp"
 #include "key.hpp"
+#include "mouse.hpp"
 
 
 class AppNative {
@@ -12,7 +13,8 @@ private:
   GLFWwindow* window;
   vec2i window_size;
   
-  Key key_event;
+  Key   key_event;
+  Mouse mouse_event;
 
 public:
   AppNative(int width, int height, const char* title);
@@ -39,10 +41,22 @@ public:
   bool isPullKey(int key);
   bool isPressKey(int key);
 
+  // Mouse Event
+  bool isPushButton(int button);
+  bool isPullButton(int button);
+  bool isPressButton(int button);
+
+  const vec2d& getMousePos() const;
 
 private:
   // call by glfw
   static void keyCallBack(GLFWwindow* window,
                           const int key,    const int scancode,
                           const int action, const int mods);
+
+  static void mouseButtonCallBack(GLFWwindow* window,
+                                  int button, int action, int mods);
+
+  static void mousePositionCallBack(GLFWwindow* window,
+                                    double xpos, double ypos);
 };
