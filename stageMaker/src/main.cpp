@@ -10,12 +10,16 @@ int main() {
   
   native.setup();
   native.setClearColor(Color::gray());
+
+  vec3f pos(10, 20, 30);
+
+  auto* twBar = TwNewBar("test bar");
+  TwAddVarRW(twBar, "pos", TW_TYPE_DIR3F, &pos, "");
+
   while (native.isOpen() && !native.isPushKey(GLFW_KEY_ESCAPE)) {
     native.clearWindowBuff();
-
-    if (native.isPullButton(GLFW_MOUSE_BUTTON_LEFT)) {
-      std::cout << "mouse pos\n" << native.getMousePos() << std::endl;
-    }
+    
+    TwDraw();
 
     native.updateEvent();
   }

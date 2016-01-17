@@ -18,6 +18,7 @@ window_size(width, height)
 }
 
 AppNative::~AppNative() {
+  TwTerminate();
   glfwTerminate();
 }
 
@@ -25,11 +26,18 @@ void AppNative::setup() {
   // set pointer to glfw
   glfwSetWindowUserPointer(window, this);
 
+  // make window
   glfwMakeContextCurrent(window);
   
+  // Callback
   glfwSetKeyCallback        (window, keyCallBack);
   glfwSetCursorPosCallback  (window, mousePositionCallBack);
   glfwSetMouseButtonCallback(window, mouseButtonCallBack);
+  glfwSetScrollCallback     (window, (GLFWscrollfun)     TwEventMouseWheelGLFW3);
+  glfwSetCharCallback       (window, (GLFWcharfun)       TwEventCharGLFW3);
+  glfwSetWindowSizeCallback (window, (GLFWwindowsizefun) TwEventWindowSizeGLFW3);
+  TwInit(TW_OPENGL, nullptr);
+  TwWindowSize(window_size.x(), window_size.y());
 }
 
 bool AppNative::isOpen() {
@@ -82,6 +90,8 @@ void AppNative::keyCallBack(GLFWwindow* window,
     native->key_event.setKeyPull(key);
     native->key_event.popKeyPress(key);
   }
+
+  TwEventKeyGLFW3(window, key, scancode, action, mods);
 }
 
 void AppNative::mouseButtonCallBack(GLFWwindow* window,
@@ -97,6 +107,8 @@ void AppNative::mouseButtonCallBack(GLFWwindow* window,
     native->mouse_event.setButtonPull(button);
     native->mouse_event.popButtonPress(button);
   }
+
+  TwEventMouseButtonGLFW3(window, button, action, mods);
 }
 
 void AppNative::mousePositionCallBack(GLFWwindow* window,
@@ -105,4 +117,6 @@ void AppNative::mousePositionCallBack(GLFWwindow* window,
   auto native = (AppNative*)glfwGetWindowUserPointer(window);
 
   native->mouse_event.setMousePos(xpos, ypos);
+
+  TwEventMousePosGLFW3(window, xpos, ypos);
 }

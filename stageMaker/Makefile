@@ -5,7 +5,7 @@ native = debug/native.o
 program = debug/program.out
 objs    = $(main) $(native)
 
-libs = -lglfw -lGL
+libs = -lglfw -lGL -lAntTweakBar -lX11
 opt  = -Wall -std=c++14
 
 $(program): $(objs)

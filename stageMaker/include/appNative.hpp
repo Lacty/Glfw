@@ -6,6 +6,7 @@
 #include "color.hpp"
 #include "key.hpp"
 #include "mouse.hpp"
+#include "tweakbar.hpp"
 
 
 class AppNative {
@@ -49,7 +50,6 @@ public:
   const vec2d& getMousePos() const;
 
 private:
-  // call by glfw
   static void keyCallBack(GLFWwindow* window,
                           const int key,    const int scancode,
                           const int action, const int mods);
