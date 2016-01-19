@@ -9,9 +9,9 @@ float toRadians(float deg) {
 }
 
 mat4f rotMatrix(const vec3f& vec) {
-  float x = vec.x();
-  float y = vec.y();
-  float z = vec.z();
+  float x = toRadians(vec.x());
+  float y = toRadians(vec.y());
+  float z = toRadians(vec.z());
 
   Eigen::Matrix4f matX;
   matX << 1,           0,            0, 0,
