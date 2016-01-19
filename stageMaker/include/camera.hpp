@@ -5,6 +5,8 @@
 
 class Camera {
 private:
+  vec2i window_size;
+
   vec3f pos;
   vec3f rot;
   vec3f up;
@@ -27,6 +29,9 @@ public:
 
   void translate(const vec3f& dist);
   void rotate(const vec3f& quant);
+
+  float getAspect() { return window_size.x() / float(window_size.y()); }
+  void setWindowSize(const vec2i& size) { window_size = size; }
 
   void setPos      (const vec3f& pos)    { this->pos        = pos; }
   void setRot      (const vec3f& rot)    { this->rot        = rot; }
