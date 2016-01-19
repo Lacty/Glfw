@@ -6,30 +6,21 @@
 AppNative::AppNative(int width, int height, const char* title) :
 window_size(width, height)
 {
-  if (!glfwInit()) {
-    exit(1);
-  }
+  if (!glfwInit()) exit(1);
 
   window = glfwCreateWindow(width, height, title, nullptr, nullptr);
   if (!window) {
     glfwTerminate();
     exit(1);
   }
-}
 
-AppNative::~AppNative() {
-  TwTerminate();
-  glfwTerminate();
-}
-
-void AppNative::setup() {
-  // set pointer to glfw
+   // set pointer to glfw
   glfwSetWindowUserPointer(window, this);
 
   // make window
   glfwMakeContextCurrent(window);
   
-  // Callback
+  // set callback func
   glfwSetKeyCallback        (window, keyCallBack);
   glfwSetCursorPosCallback  (window, mousePositionCallBack);
   glfwSetMouseButtonCallback(window, mouseButtonCallBack);
@@ -38,7 +29,19 @@ void AppNative::setup() {
   glfwSetWindowSizeCallback (window, (GLFWwindowsizefun) TwEventWindowSizeGLFW3);
   TwInit(TW_OPENGL, nullptr);
   TwWindowSize(window_size.x(), window_size.y());
+
+  // init camera
+  camera = Camera(vec3f(0, 0, 0), vec3f(0, 0, -10));
+  camera.setWindowSize(window_size);
+  camera.registerTw();
 }
+
+AppNative::~AppNative() {
+  TwTerminate();
+  glfwTerminate();
+}
+
+void AppNative::setup() {}
 
 bool AppNative::isOpen() {
   return !glfwWindowShouldClose(window);
@@ -46,6 +49,7 @@ bool AppNative::isOpen() {
 
 void AppNative::clearWindowBuff() {
   glClear(GL_COLOR_BUFFER_BIT);
+  camera.update();
 }
 
 void AppNative::updateEvent() {
@@ -73,7 +77,7 @@ bool AppNative::isPushButton(int button) { return mouse_event.isPush(button); }
 bool AppNative::isPullButton(int button) { return mouse_event.isPull(button); }
 bool AppNative::isPressButton(int button) { return mouse_event.isPress(button); }
 
-const vec2d& AppNative::getMousePos() const { return mouse_event.getPos(); }
+const vec2d& AppNative::mousePos() const { return mouse_event.getPos(); }
 
 
 void AppNative::keyCallBack(GLFWwindow* window,

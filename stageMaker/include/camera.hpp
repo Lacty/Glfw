@@ -1,6 +1,7 @@
 
 #pragma once
 #include "vector.hpp"
+#include "tweakbar.hpp"
 
 
 class Camera {
@@ -22,9 +23,13 @@ private:
   void lookAt();
   void perspTrans();
 
+  TwBar* twBar;
+
 public:
   Camera() = default;
   Camera(const vec3f& pos, const vec3f& target_pos);
+
+  void registerTw();
 
   void update();
 
@@ -46,7 +51,7 @@ public:
   const vec3f& getPos()       const { return pos; }
   const vec3f& getRot()       const { return rot; }
   const vec3f& getUp()        const { return up; }
-  const vec3f% getTargetPos() const { return target_pos; }
+  const vec3f& getTargetPos() const { return target_pos; }
 
   const float getFovy() const { return fovy; }
   const float getNear() const { return near; }

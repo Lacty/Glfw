@@ -65,12 +65,21 @@ void Camera::lookAt() {
   glMultMatrixf(m.data());
 }
 
+
+void Camera::registerTw() {
+  twBar = TwNewBar("camera");
+  TwAddVarRW(twBar, "pos", TW_TYPE_DIR3F, &pos, "");
+  TwAddVarRW(twBar, "rot", TW_TYPE_DIR3F, &rot, "");
+  TwAddVarRW(twBar, "target", TW_TYPE_DIR3F, &target_pos, "");
+  TwAddVarRW(twBar, "target_dist", TW_TYPE_DIR3F, &target_dist, "");
+}
+
 void Camera::update() {
   perspTrans();
   lookAt();
 }
 
-void translate(const vec3f& dist) {
+void Camera::translate(const vec3f& dist) {
   mat4f m;
   m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
 
@@ -78,7 +87,7 @@ void translate(const vec3f& dist) {
   pos.y() = m(1, 3);
   pos.z() = m(2, 3);
 
-  m *= transMatrix(target_dist);
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_dist);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
@@ -91,13 +100,7 @@ void Camera::rotate(const vec3f& quant) {
   rot.z() -= quant.z();
 
   mat4f m;
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
-
-  pos.x() = m(0, 1);
-  pos.y() = m(1, 3);
-  pos.z() = m(2, 3);
-
-  m *= transMatrix(target_dist);
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_dist);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);

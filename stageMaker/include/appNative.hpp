@@ -7,6 +7,7 @@
 #include "key.hpp"
 #include "mouse.hpp"
 #include "tweakbar.hpp"
+#include "camera.hpp"
 
 
 class AppNative {
@@ -16,6 +17,8 @@ private:
   
   Key   key_event;
   Mouse mouse_event;
+
+  Camera camera;
 
 public:
   AppNative(int width, int height, const char* title);
@@ -47,7 +50,7 @@ public:
   bool isPullButton(int button);
   bool isPressButton(int button);
 
-  const vec2d& getMousePos() const;
+  const vec2d& mousePos() const;
 
 private:
   static void keyCallBack(GLFWwindow* window,
