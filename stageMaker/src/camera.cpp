@@ -78,7 +78,26 @@ void translate(const vec3f& dist) {
   pos.y() = m(1, 3);
   pos.z() = m(2, 3);
 
-  m *= transMatrix(vec3f(0, 0, -10));
+  m *= transMatrix(target_dist);
+
+  target_pos.x() = m(0, 3);
+  target_pos.y() = m(1, 3);
+  target_pos.z() = m(2, 3);
+}
+
+void Camera::rotate(const vec3f& quant) {
+  rot.x() -= quant.x();
+  rot.y() -= quant.y();
+  rot.z() -= quant.z();
+
+  mat4f m;
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
+
+  pos.x() = m(0, 1);
+  pos.y() = m(1, 3);
+  pos.z() = m(2, 3);
+
+  m *= transMatrix(target_dist);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
