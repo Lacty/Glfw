@@ -67,17 +67,13 @@ int main() {
   // delete buf
   alDeleteBuffers(1, &buffer_id);
 
-  alcMakeContextCurrent(nullptr);
-  alcDestroyContext(context);
-  alcCloseDevice(device);
-
   while (native.isOpen() && !native.isPushKey(GLFW_KEY_ESCAPE)) {
     native.clearWindowBuff();
 
     native.updateEvent();
   }
 
-  //alcMakeContextCurrent(nullptr);
-  //alcDestroyContext(context);
-  //alcCloseDevice(device);
+  alcMakeContextCurrent(nullptr);
+  alcDestroyContext(context);
+  alcCloseDevice(device);
 }
