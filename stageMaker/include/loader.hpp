@@ -3,7 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <list>
+#include <vector>
 #include <Pico/picojson.h>
 #include "vector.hpp"
 
@@ -11,13 +11,13 @@
 class Loader {
 private:
   std::string path;
-  std::list<float> vtx;
+  std::vector<float> vertices;
+  std::vector<float> colors;
 
 public:
   Loader(const std::string& path) : path(path) {}
+  Loader() = default;
 
-  // this class can't copy
-  Loader() = delete;
   Loader(const Loader&) = delete;
   Loader& operator =(const Loader&) = delete;
 
@@ -40,24 +40,43 @@ public:
 
     auto obj = v.get<picojson::object>();
 
-    auto array = obj["vertex"].get<picojson::array>();
+    auto array_vtx = obj["vertices"].get<picojson::array>();
+    auto array_col = obj["colors"].get<picojson::array>();
 
-    vtx.clear();
-    for (auto it : array) {
-      vtx.push_back(it.get<double>());
+    vertices.clear();
+    for (const auto& it : array_vtx) {
+      vertices.push_back(it.get<double>());
+    }
+
+    colors.clear();
+    for (const auto& it : array_col) {
+      colors.push_back(it.get<double>());
     }
   }
 
-  void save(const std::list<float>& vtx) {
+  void save(const std::vector<float>& _vertices,
+            const std::vector<float>& _colors)
+  {
     picojson::object obj;
     picojson::array  array;
   
-    for (auto it : vtx) {
+    vertices = _vertices;
+    colors   = _colors;
+
+    for (const auto& it : vertices) {
       array.emplace_back(picojson::value(it));
     }
   
-    // make object
-    obj.insert(std::make_pair("vector", picojson::value(array)));
+    // add vertices
+    obj.insert(std::make_pair("vertices", picojson::value(array)));
+
+    array.clear();
+    for (const auto& it : colors) {
+      array.emplace_back(picojson::value(it));
+    }
+
+    // add colors
+    obj.insert(std::make_pair("colors", picojson::value(array)));
 
     // convert to value
     picojson::value json(obj);
@@ -67,7 +86,11 @@ public:
     ofs << json.serialize().c_str();
   }
 
-  const std::list<float>& getVtx() const {
-    return vtx;
+  const std::vector<float>& getVertices() const {
+    return vertices;
+  }
+
+  const std::vector<float>& getColors() const {
+    return colors;
   }
 };
