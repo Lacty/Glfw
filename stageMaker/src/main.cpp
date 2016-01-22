@@ -4,13 +4,10 @@
 
 #include "../include/appNative.hpp"
 #include "../include/maker.hpp"
-#include "../include/loader.hpp"
 
 
 int main() {
   AppNative native(640, 480, "hoge");
-  
-  native.setup();
   native.setClearColor(Color::gray());
 
   Maker maker;

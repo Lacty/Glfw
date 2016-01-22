@@ -29,8 +29,6 @@ public:
   AppNative(const AppNative&) = delete;
   AppNative& operator =(const AppNative&) = delete;
 
-  void setup();
-
   bool isOpen();
   void clearWindowBuff();
   void updateEvent();

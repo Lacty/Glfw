@@ -41,8 +41,6 @@ AppNative::~AppNative() {
   glfwTerminate();
 }
 
-void AppNative::setup() {}
-
 bool AppNative::isOpen() {
   return !glfwWindowShouldClose(window);
 }
