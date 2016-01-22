@@ -22,28 +22,28 @@ private:
 
   TwBar* twBar;
 
+  static void updateTwBar(Stage* _info) {
+    TwRemoveVar(_info->twBar, "vtx");
+    TwRemoveVar(_info->twBar, "color");
+    TwAddVarRW(_info->twBar, "vtx", TW_TYPE_DIR3F,
+               &_info->vertices[_info->getCurrentVtxIndex()], "");
+    TwAddVarRW(_info->twBar, "color", TW_TYPE_COLOR4F,
+               &_info->colors[_info->getCurrentColorIndex()], "");
+
+  }
+
   static void TW_CALL goNext(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
     if (info->isUpperLimit()) return;
     info->current_num++;
-    TwRemoveVar(info->twBar, "vtx");
-    TwRemoveVar(info->twBar, "color");
-    TwAddVarRW(info->twBar, "vtx", TW_TYPE_DIR3F,
-               &info->vertices[info->getCurrentVtxIndex()], "");
-    TwAddVarRW(info->twBar, "color", TW_TYPE_COLOR4F,
-               &info->colors[info->getCurrentColorIndex()], "");
+    updateTwBar(info);
   }
 
   static void TW_CALL goBack(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
     if (info->isLowerLimit()) return;
     info->current_num--;
-    TwRemoveVar(info->twBar, "vtx");
-    TwRemoveVar(info->twBar, "color");
-    TwAddVarRW(info->twBar, "vtx", TW_TYPE_DIR3F,
-               &info->vertices[info->getCurrentVtxIndex()], "");
-    TwAddVarRW(info->twBar, "color", TW_TYPE_COLOR4F,
-               &info->colors[info->getCurrentColorIndex()], "");
+    updateTwBar(info);
   }
 
 public:
