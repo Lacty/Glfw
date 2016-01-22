@@ -24,14 +24,26 @@ private:
 
   static void TW_CALL goNext(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
-    if (info->isLowerLimit()) return;
+    if (info->isUpperLimit()) return;
     info->current_num++;
+    TwRemoveVar(info->twBar, "vtx");
+    TwRemoveVar(info->twBar, "color");
+    TwAddVarRW(info->twBar, "vtx", TW_TYPE_DIR3F,
+               &info->vertices[info->getCurrentVtxIndex()], "");
+    TwAddVarRW(info->twBar, "color", TW_TYPE_COLOR4F,
+               &info->colors[info->getCurrentColorIndex()], "");
   }
 
   static void TW_CALL goBack(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
     if (info->isLowerLimit()) return;
     info->current_num--;
+    TwRemoveVar(info->twBar, "vtx");
+    TwRemoveVar(info->twBar, "color");
+    TwAddVarRW(info->twBar, "vtx", TW_TYPE_DIR3F,
+               &info->vertices[info->getCurrentVtxIndex()], "");
+    TwAddVarRW(info->twBar, "color", TW_TYPE_COLOR4F,
+               &info->colors[info->getCurrentColorIndex()], "");
   }
 
 public:
@@ -45,7 +57,7 @@ public:
  
   void registerTw() {
     twBar = TwNewBar("stage");
-    TwAddVarRW(twBar, "pos", TW_TYPE_FLOAT, &current_num, "");
+    TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
     TwAddButton(twBar, "go next", goNext, this, "");
     TwAddButton(twBar, "go back", goBack, this, "");
     TwAddVarRW(twBar, "vtx", TW_TYPE_DIR3F, &vertices[getCurrentVtxIndex()], "");

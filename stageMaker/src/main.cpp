@@ -12,7 +12,6 @@ int main() {
 
   Maker maker;
   maker.setup();
-
   while (native.isOpen() && !native.isPushKey(GLFW_KEY_ESCAPE)) {
     native.clearWindowBuff();
    
