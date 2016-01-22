@@ -29,7 +29,11 @@ private:
                &_info->vertices[_info->getCurrentVtxIndex()], "");
     TwAddVarRW(_info->twBar, "color", TW_TYPE_COLOR4F,
                &_info->colors[_info->getCurrentColorIndex()], "");
+  }
 
+  static void TW_CALL save(void* _info) {
+    Stage* info = static_cast<Stage*>(_info);
+    info->loader.save(info->vertices, info->colors);
   }
 
   static void TW_CALL goNext(void* _info) {
@@ -58,6 +62,7 @@ public:
   void registerTw() {
     twBar = TwNewBar("stage");
     TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
+    TwAddButton(twBar, "save", save, this, "");
     TwAddButton(twBar, "go next", goNext, this, "");
     TwAddButton(twBar, "go back", goBack, this, "");
     TwAddVarRW(twBar, "vtx", TW_TYPE_DIR3F, &vertices[getCurrentVtxIndex()], "");
