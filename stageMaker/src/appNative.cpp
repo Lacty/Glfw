@@ -76,6 +76,17 @@ bool AppNative::isPullButton(int button) { return mouse_event.isPull(button); }
 bool AppNative::isPressButton(int button) { return mouse_event.isPress(button); }
 
 const vec2d& AppNative::mousePos() const { return mouse_event.getPos(); }
+void AppNative::setMousePos(const vec2d& pos) { glfwSetCursorPos(window, pos.x(), pos.y()); }
+
+
+// Camera
+void AppNative::camRotate(const vec3f& dist) {
+  camera.rotate(dist);
+}
+
+void AppNative::camTranslate(const vec3f& quant) {
+  camera.translate(quant);
+}
 
 
 void AppNative::keyCallBack(GLFWwindow* window,
@@ -118,8 +129,6 @@ void AppNative::mousePositionCallBack(GLFWwindow* window,
 { 
   auto native = (AppNative*)glfwGetWindowUserPointer(window);
 
-  native->mouse_event.setMousePos(xpos, ypos);
-
   TwEventMousePosGLFW3(window, xpos, ypos);
 }
 
@@ -128,4 +137,5 @@ void AppNative::windowSizeCallback(GLFWwindow* window, const int width, const in
 
   TwEventWindowSizeGLFW3(window, width, height);
   native->camera.setWindowSize(vec2i(width, height));
+  glViewport(0, 0, width, height);
 }

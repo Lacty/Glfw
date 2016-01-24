@@ -49,6 +49,10 @@ public:
   bool isPressButton(int button);
 
   const vec2d& mousePos() const;
+  void setMousePos(const vec2d& pos);
+
+  void camRotate(const vec3f& dist);
+  void camTranslate(const vec3f& quant);
 
 private:
   static void keyCallBack(GLFWwindow* window,
