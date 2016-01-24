@@ -3,6 +3,8 @@
 #include "loader.hpp"
 #include "tweakbar.hpp"
 
+#include <cassert>
+
 
 class Stage {
 private:
@@ -52,17 +54,21 @@ private:
 
 public:
   Stage() :
-  loader("assets/stage.json"),
-  current_num(0) {
+  loader("assets/stage.json")
+  {
     loader.load();
     vertices = loader.getVertices();
     colors   = loader.getColors();
+    
+    int dim = 3; // three-dimensional
+    assert(vertices.size() % dim == 0);
+    current_num = vertices.size() / dim - 1;
   }
  
   void registerTw() {
     twBar = TwNewBar("stage");
     TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
-    TwAddButton(twBar, "save", save, this, "");
+    TwAddButton(twBar, "save", save, this, "key=SHIFT+S");
     TwAddButton(twBar, "go next", goNext, this, "");
     TwAddButton(twBar, "go back", goBack, this, "");
     TwAddVarRW(twBar, "vtx", TW_TYPE_DIR3F, &vertices[getCurrentVtxIndex()], "");

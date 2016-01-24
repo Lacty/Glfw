@@ -68,9 +68,9 @@ void Camera::lookAt() {
 
 void Camera::registerTw() {
   twBar = TwNewBar("camera");
-  TwAddVarRW(twBar, "pos", TW_TYPE_DIR3F, &pos, "");
-  TwAddVarRW(twBar, "rot", TW_TYPE_DIR3F, &rot, "");
-  TwAddVarRW(twBar, "target", TW_TYPE_DIR3F, &target_pos, "");
+  TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,         "");
+  TwAddVarRW(twBar, "rot",         TW_TYPE_DIR3F, &rot,         "");
+  TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target_pos,  "");
   TwAddVarRW(twBar, "target_dist", TW_TYPE_DIR3F, &target_dist, "");
 }
 
@@ -99,9 +99,9 @@ void Camera::rotate(const vec3f& quant) {
   rot.y() -= quant.y();
   rot.z() -= quant.z();
 
-  if (rot.x() >= 180) { rot.x() -= 360; }
+  if (rot.x() >=  180) { rot.x() -= 360; }
   if (rot.x() <= -180) { rot.x() += 360; }
-  if (rot.y() >= 180) { rot.y() -= 360; }
+  if (rot.y() >=  180) { rot.y() -= 360; }
   if (rot.y() <= -180) { rot.y() += 360; }
 
   mat4f m;
