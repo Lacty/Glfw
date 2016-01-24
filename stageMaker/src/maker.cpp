@@ -25,6 +25,22 @@ void Maker::updateMouse(AppNative& native) {
   }
 }
 
+void Maker::updateCamera(AppNative& native) {
+  float speed = 0.1f;
+  if (native.isPressKey(GLFW_KEY_W)) {
+    native.camTranslate(vec3f(0, 0, -speed));
+  }
+  if (native.isPressKey(GLFW_KEY_S)) {
+    native.camTranslate(vec3f(0, 0, speed));
+  }
+  if (native.isPressKey(GLFW_KEY_D)) {
+    native.camTranslate(vec3f(speed, 0, 0));
+  }
+  if (native.isPressKey(GLFW_KEY_A)) {
+    native.camTranslate(vec3f(-speed, 0, 0));
+  }
+}
+
 
 void Maker::setup() {
   stage.registerTw();
@@ -32,6 +48,7 @@ void Maker::setup() {
 
 void Maker::update(AppNative& native) {
   updateMouse(native);
+  updateCamera(native);
 }
 
 void Maker::draw() {

@@ -83,7 +83,7 @@ void Camera::translate(const vec3f& dist) {
   mat4f m;
   m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
 
-  pos.x() = m(0, 1);
+  pos.x() = m(0, 3);
   pos.y() = m(1, 3);
   pos.z() = m(2, 3);
 
