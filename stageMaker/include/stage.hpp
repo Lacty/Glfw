@@ -24,6 +24,26 @@ private:
 
   TwBar* twBar;
 
+  static void TW_CALL addVertex(void* _info) {
+    Stage* info = static_cast<Stage*>(_info);
+    float X = info->vertices[info->vertices.size() - 3];
+    float Y = info->vertices[info->vertices.size() - 2];
+    float Z = info->vertices[info->vertices.size() - 1];
+    float R = info->colors[info->colors.size() - 4];
+    float G = info->colors[info->colors.size() - 3];
+    float B = info->colors[info->colors.size() - 2];
+    float A = info->colors[info->colors.size() - 1];
+    info->vertices.emplace_back(X);
+    info->vertices.emplace_back(Y);
+    info->vertices.emplace_back(Z);
+    info->colors.emplace_back(R);
+    info->colors.emplace_back(G);
+    info->colors.emplace_back(B);
+    info->colors.emplace_back(A);
+    info->current_num++;
+    updateTwBar(info);
+  }
+
   static void updateTwBar(Stage* _info) {
     TwRemoveVar(_info->twBar, "vtx");
     TwRemoveVar(_info->twBar, "color");
@@ -68,9 +88,10 @@ public:
   void registerTw() {
     twBar = TwNewBar("stage");
     TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
-    TwAddButton(twBar, "save", save, this, "key=SHIFT+S");
-    TwAddButton(twBar, "go next", goNext, this, "");
-    TwAddButton(twBar, "go back", goBack, this, "");
+    TwAddButton(twBar, "add vertex", addVertex, this, "key=SHIFT+A");
+    TwAddButton(twBar, "save",       save,      this, "key=SHIFT+S");
+    TwAddButton(twBar, "go next",    goNext,    this, "");
+    TwAddButton(twBar, "go back",    goBack,    this, "");
     TwAddVarRW(twBar, "vtx", TW_TYPE_DIR3F, &vertices[getCurrentVtxIndex()], "");
     TwAddVarRW(twBar, "color", TW_TYPE_COLOR4F, &colors[getCurrentColorIndex()], "");
   }
