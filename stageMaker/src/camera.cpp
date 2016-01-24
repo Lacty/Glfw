@@ -99,6 +99,11 @@ void Camera::rotate(const vec3f& quant) {
   rot.y() -= quant.y();
   rot.z() -= quant.z();
 
+  if (rot.x() >= 180) { rot.x() -= 360; }
+  if (rot.x() <= -180) { rot.x() += 360; }
+  if (rot.y() >= 180) { rot.y() -= 360; }
+  if (rot.y() <= -180) { rot.y() += 360; }
+
   mat4f m;
   m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_dist);
 
