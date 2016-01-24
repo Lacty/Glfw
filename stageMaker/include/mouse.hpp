@@ -1,6 +1,7 @@
 
 #pragma once
 #include <set>
+#include <GLFW/glfw3.h>
 #include "vector.hpp"
 
 
@@ -30,7 +31,10 @@ public:
 
   void popButtonPress(int button) { press.erase(press.find(button)); }
 
-  void setMousePos(double xpos, double ypos) { pos = vec2d(xpos, ypos); }
+  void setMousePos(GLFWwindow* window) 
+  {
+    glfwGetCursorPos(window, &pos[0], &pos[1]);
+  }
 
   bool isPush(int button) {
     if (push.find(button) == push.end()) return false;

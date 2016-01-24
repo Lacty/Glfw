@@ -19,6 +19,10 @@ window_size(width, height)
 
   // make window
   glfwMakeContextCurrent(window);
+
+  // set Viewport
+  std::cout << "window size\n" << window_size << std::endl;
+  glViewport(0, 0, window_size.x(), window_size.y());
   
   // set callback func
   glfwSetKeyCallback        (window, keyCallBack);
@@ -55,6 +59,7 @@ void AppNative::updateEvent() {
   mouse_event.clear();
   glfwSwapBuffers(window);
   glfwPollEvents();
+  mouse_event.setMousePos(window);
 }
 
 
@@ -127,8 +132,6 @@ void AppNative::mouseButtonCallBack(GLFWwindow* window,
 void AppNative::mousePositionCallBack(GLFWwindow* window,
                                       double xpos, double ypos)
 { 
-  auto native = (AppNative*)glfwGetWindowUserPointer(window);
-
   TwEventMousePosGLFW3(window, xpos, ypos);
 }
 
