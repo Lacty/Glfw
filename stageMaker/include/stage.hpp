@@ -44,6 +44,25 @@ private:
     updateTwBar(info);
   }
 
+  static void TW_CALL deleteLast(void* _info) {
+    Stage* info = static_cast<Stage*>(_info);
+    info->current_num--;
+    updateTwBar(info);
+
+    auto vtx_last = info->vertices.end();
+    --vtx_last;
+    info->vertices.erase(vtx_last--); // Z
+    info->vertices.erase(vtx_last--); // Y
+    info->vertices.erase(vtx_last--); // X
+    
+    auto col_last = info->colors.end();
+    --col_last;
+    info->colors.erase(col_last--); // A
+    info->colors.erase(col_last--); // B
+    info->colors.erase(col_last--); // G
+    info->colors.erase(col_last--); // R
+  }
+  
   static void updateTwBar(Stage* _info) {
     TwRemoveVar(_info->twBar, "vtx");
     TwRemoveVar(_info->twBar, "color");
@@ -88,10 +107,11 @@ public:
   void registerTw() {
     twBar = TwNewBar("stage");
     TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
-    TwAddButton(twBar, "add vertex", addVertex, this, "key=SHIFT+A");
-    TwAddButton(twBar, "save",       save,      this, "key=SHIFT+S");
-    TwAddButton(twBar, "go next",    goNext,    this, "");
-    TwAddButton(twBar, "go back",    goBack,    this, "");
+    TwAddButton(twBar, "add vertex",    addVertex,  this, "key=SHIFT+A");
+    TwAddButton(twBar, "delete vertex", deleteLast, this, "key=SHIFT+D");
+    TwAddButton(twBar, "save",          save,       this, "key=SHIFT+S");
+    TwAddButton(twBar, "go next",       goNext,     this, "");
+    TwAddButton(twBar, "go back",       goBack,     this, "");
     TwAddVarRW(twBar, "vtx", TW_TYPE_DIR3F, &vertices[getCurrentVtxIndex()], "");
     TwAddVarRW(twBar, "color", TW_TYPE_COLOR4F, &colors[getCurrentColorIndex()], "");
   }
