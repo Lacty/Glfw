@@ -54,6 +54,9 @@ public:
   void camRotate(const vec3f& dist);
   void camTranslate(const vec3f& quant);
 
+  const vec3f& getCamPos() const { return camera.getPos(); }
+  const vec3f& getCamRot() const { return camera.getRot(); }
+
 private:
   static void keyCallBack(GLFWwindow* window,
                           const int key,    const int scancode,

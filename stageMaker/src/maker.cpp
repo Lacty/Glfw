@@ -51,6 +51,6 @@ void Maker::update(AppNative& native) {
   updateCamera(native);
 }
 
-void Maker::draw() {
-  stage.draw();
+void Maker::draw(AppNative& native) {
+  stage.draw(native.getCamRot());
 }

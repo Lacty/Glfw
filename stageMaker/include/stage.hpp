@@ -91,6 +91,59 @@ private:
     updateTwBar(info);
   }
 
+  void drawStage() {
+    glPushMatrix();
+
+      // TIPS: camera option
+      glTranslatef(0, 0, -10);
+      
+      glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+      glColorPointer(4, GL_FLOAT, 0, &colors[0]);
+
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glEnableClientState(GL_COLOR_ARRAY);
+
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, getVtxIndex());
+
+      glDisableClientState(GL_COLOR_ARRAY);
+      glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+  }
+
+  void drawHighlight(const vec3f& _rot) {
+    glPushMatrix();
+      
+      // TIPS: camera option
+      glTranslatef(0, 0, -10);
+
+      // current editting vtx pos
+      glTranslatef(vertices[getCurrentVtxIndex()],     // X
+                   vertices[getCurrentVtxIndex() + 1], // Y
+                   vertices[getCurrentVtxIndex() + 2]);// Z
+
+      glColor4f(1, 0, 0, 1); // red
+
+      // billboard
+      glRotatef(_rot.x(), 1, 0, 0);
+      glRotatef(_rot.y(), 0, 1, 0);
+      glRotatef(_rot.z(), 0, 0, 1);
+
+      // Rect vertices
+      const float vtx[] = {
+        -0.04f,  0.04f, 0.0f,
+        -0.04f, -0.04f, 0.0f,
+         0.04f,  0.04f, 0.0f,
+         0.04f, -0.04f, 0.0f
+      };
+
+      glVertexPointer(3, GL_FLOAT, 0, vtx);
+      glEnableClientState(GL_VERTEX_ARRAY);
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+      glDisableClientState(GL_VERTEX_ARRAY);
+
+    glPopMatrix();
+  }
+
 public:
   Stage() :
   loader("assets/stage.json")
@@ -116,19 +169,8 @@ public:
     TwAddVarRW(twBar, "color", TW_TYPE_COLOR4F, &colors[getCurrentColorIndex()], "");
   }
 
-  void draw() {
-    glPushMatrix();
-      glTranslatef(0, 0, -10);
-      glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
-      glColorPointer(4, GL_FLOAT, 0, &colors[0]);
-
-      glEnableClientState(GL_VERTEX_ARRAY);
-      glEnableClientState(GL_COLOR_ARRAY);
-
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, getVtxIndex());
-
-      glDisableClientState(GL_COLOR_ARRAY);
-      glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
+  void draw(const vec3f& _rot) {
+    drawStage();
+    drawHighlight(_rot);
   }
 };

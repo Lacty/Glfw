@@ -17,7 +17,7 @@ int main() {
     native.clearWindowBuff();
    
     maker.update(native);
-    maker.draw();
+    maker.draw(native);
     TwDraw();
 
     native.updateEvent();

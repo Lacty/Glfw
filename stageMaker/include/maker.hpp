@@ -22,5 +22,5 @@ public:
 
   void update(AppNative& native);
       
-  void draw();
+  void draw(AppNative& native);
 };
