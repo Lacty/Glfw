@@ -16,7 +16,7 @@ void Maker::updateMouse(AppNative& native) {
     rotate.y() = native.mousePos().x() - clip_mouse_pos.x();
     rotate.z() = 0.0f;
 
-    rotate *= 0.01f;
+    rotate *= 0.06f;
     native.camRotate(rotate);
     native.setMousePos(clip_mouse_pos);
   } else
