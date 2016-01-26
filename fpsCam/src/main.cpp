@@ -10,6 +10,10 @@ float toRadians(float deg) {
   return (deg * M_PI) / 180.0f;
 }
 
+float toDegree(float rad) {
+  return (rad * 180) / M_PI;
+}
+
 int main() {
   if (!glfwInit()) return -1;
 
@@ -37,6 +41,8 @@ int main() {
              pos, up, rot, forward,
              fovy, near, far);
 
+  vec3f billRot(0, 0, 0);
+
   vec2d mouse(width * 0.5, height * 0.5);
   glfwSetCursorPos(window, mouse.x(), mouse.y());
 
@@ -56,6 +62,7 @@ int main() {
     };
     
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+      billRot = vec3f(0, 0, 0);
       forward = vec3f(0, 0, -1);
     }
 
@@ -71,8 +78,8 @@ int main() {
           glPushMatrix();
 
           glTranslatef(i, k, h);
-          glRotatef(rot.x(), 0, 1, 0);
-          glRotatef(rot.y(), 1, 0, 0);
+          glRotatef(billRot.y(), 1, 0, 0);
+          glRotatef(billRot.x(), 0, 1, 0);
 
           glColor4f(1, 1, 1, 1);
           if (i == 0) glColor4f(1, 0, 0, 1);
@@ -90,18 +97,18 @@ int main() {
 
     // MOUSE ---
     glfwGetCursorPos(window, &mouse[0], &mouse[1]);
-    rot = vec3f(0, 0, 0);
-    rot.x() += (width * 0.5  - mouse.x()) * 0.1;
-    rot.y() += (height * 0.5 - mouse.y()) * 0.1;    
+    rot.x() = (width * 0.5  - mouse.x()) * 0.1;
+    rot.y() = (height * 0.5 - mouse.y()) * 0.1;
+    billRot.x() += rot.x();
+    billRot.y() += rot.y();
     
     Eigen::Quaternionf quat;
     quat = Eigen::AngleAxisf(toRadians(rot.x()), up);
     forward = quat * forward;
     quat = Eigen::AngleAxisf(toRadians(rot.y()), forward.cross(up));
     forward = quat * forward;
-    
+
     cam.setForward(forward);
-    cam.setUp(up);
 
     glfwSetCursorPos(window, width * 0.5, height * 0.5);
 
