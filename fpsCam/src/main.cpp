@@ -1,9 +1,14 @@
 
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include <Eigen/Geometry>
 #include "../include/vector.hpp"
 #include "../include/camera.hpp"
 
+
+float toRadians(float deg) {
+  return (deg * M_PI) / 180.0f;
+}
 
 int main() {
   if (!glfwInit()) return -1;
@@ -23,13 +28,13 @@ int main() {
   vec3f pos(0, 0, 0);
   vec3f up(0, 1, 0);
   vec3f rot(0, 0, 0);
-  vec3f foward(0, 0, -1);
+  vec3f forward(0, 0, -1);
   float fovy = 35.0f;
   float near = 0.5f;
   float far  = 50.0f;
 
   Camera cam(width, height,
-             pos, up, rot, foward,
+             pos, up, rot, forward,
              fovy, near, far);
 
   vec2d mouse(width * 0.5, height * 0.5);
@@ -50,12 +55,8 @@ int main() {
        0.1, -0.1, 0.0
     };
     
-    // ROTATE --
-    glRotatef(-rot.x(), 0, 1, 0); // YOKO
-    glRotatef(-rot.y(), 1, 0, 0); // TATE
-
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-      rot = vec3f(0, 0, 0);
+      forward = vec3f(0, 0, -1);
     }
 
     glVertexPointer(3, GL_FLOAT, 0, vtx);
@@ -89,8 +90,19 @@ int main() {
 
     // MOUSE ---
     glfwGetCursorPos(window, &mouse[0], &mouse[1]);
+    rot = vec3f(0, 0, 0);
     rot.x() += (width * 0.5  - mouse.x()) * 0.1;
-    rot.y() += (height * 0.5 - mouse.y()) * 0.1;
+    rot.y() += (height * 0.5 - mouse.y()) * 0.1;    
+    
+    Eigen::Quaternionf quat;
+    quat = Eigen::AngleAxisf(toRadians(rot.x()), up);
+    forward = quat * forward;
+    quat = Eigen::AngleAxisf(toRadians(rot.y()), forward.cross(up));
+    forward = quat * forward;
+    
+    cam.setForward(forward);
+    cam.setUp(up);
+
     glfwSetCursorPos(window, width * 0.5, height * 0.5);
 
     glfwSwapBuffers(window);

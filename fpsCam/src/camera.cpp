@@ -2,16 +2,11 @@
 #include "../include/camera.hpp"
 
 
-float toRadians(float deg) {
-  return (deg * M_PI) / 180.0f;
-}
-
-
 Camera::Camera(int _width, int _height,
                const vec3f& _pos,
                const vec3f& _up,
                const vec3f& _rot,
-               const vec3f& _foward,
+               const vec3f& _forward,
                float _fovy,
                float _near,
                float _far)
@@ -19,7 +14,7 @@ Camera::Camera(int _width, int _height,
   pos    = _pos;
   up     = _up;
   rot    = _rot;
-  foward = _foward;
+  forward = _forward;
   fovy   = _fovy;
   near   = _near;
   far    = _far;
@@ -27,7 +22,7 @@ Camera::Camera(int _width, int _height,
 }
 
 void Camera::perspView() {
-  float f = 1 / std::tan(toRadians(fovy) * 0.5f);
+  float f = 1 / std::tan(((fovy * M_PI) / 180.0f) * 0.5f);
   float g = -((far +  near) / (far - near));
   float h = -((2 * far * near) / (far - near));
   float i = f / aspect;
@@ -42,7 +37,7 @@ void Camera::perspView() {
 }
 
 void Camera::lookAt() {
-  vec3f a  = pos - foward;
+  vec3f a  = pos - forward;
   vec3f z_ = a / a.norm();
 
   vec3f b  = up.cross(z_);
