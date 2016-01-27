@@ -118,6 +118,8 @@ void Camera::rotate(const vec3f& quant) {
   mat4f m;
   m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
 
+  
+
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
   target_pos.z() = m(2, 3);

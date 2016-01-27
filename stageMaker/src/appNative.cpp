@@ -59,7 +59,6 @@ void AppNative::updateEvent() {
   mouse_event.clear();
   glfwSwapBuffers(window);
   glfwPollEvents();
-  mouse_event.setMousePos(window);
 }
 
 
@@ -80,7 +79,7 @@ bool AppNative::isPushButton(int button) { return mouse_event.isPush(button); }
 bool AppNative::isPullButton(int button) { return mouse_event.isPull(button); }
 bool AppNative::isPressButton(int button) { return mouse_event.isPress(button); }
 
-const vec2d& AppNative::mousePos() const { return mouse_event.getPos(); }
+const vec2d& AppNative::mousePos() { return mouse_event.getPos(window); }
 void AppNative::setMousePos(const vec2d& pos) { glfwSetCursorPos(window, pos.x(), pos.y()); }
 
 

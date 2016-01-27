@@ -9,6 +9,7 @@ void Maker::updateMouse(AppNative& native) {
   if (native.isPressButton(GLFW_MOUSE_BUTTON_RIGHT)) {
     if (!isBeganPressLeft) {
       clip_mouse_pos = native.mousePos();
+      std::cout << "press\n" << native.mousePos() << std::endl;;
       isBeganPressLeft = true;
     }
     vec3f angle(0.0f, 0.0f, 0.0f);

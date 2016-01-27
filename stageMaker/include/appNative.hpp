@@ -48,7 +48,7 @@ public:
   bool isPullButton(int button);
   bool isPressButton(int button);
 
-  const vec2d& mousePos() const;
+  const vec2d& mousePos();
   void setMousePos(const vec2d& pos);
 
   void camRotate(const vec3f& dist);
