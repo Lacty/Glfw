@@ -9,6 +9,7 @@
 - picojson
 - AntTweakBar
 - X11
+- loprnal
 
 ## Compile
 - `g++ -std=c++11 <file>.cpp -lglfw -lGL -lftgl -lAntTweakBar -X11`
