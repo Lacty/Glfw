@@ -54,8 +54,21 @@ public:
   void camRotate(const vec3f& dist);
   void camTranslate(const vec3f& quant);
 
-  const vec3f& getCamPos() const { return camera.getPos(); }
-  const vec3f& getCamRot() const { return camera.getRot(); }
+  void setCamPos(const vec3f& _pos) { camera.setPos(_pos); }
+  void setCamRot(const vec3f& _rot) { camera.setRot(_rot); }
+  void setCamUp(const vec3f& _up)   { camera.setUp(_up); }
+  void setCamTargetPos(const vec3f& _target) { camera.setTargetPos(_target); }
+  void setCamFovy(float _fovy) { camera.setFovy(_fovy); }
+  void setCamNear(float _near) { camera.setNear(_near); }
+  void setCamFar(float _far) { camera.setFar(_far); }
+
+  const vec3f& getCamPos()    const { return camera.getPos(); }
+  const vec3f& getCamRot()    const { return camera.getRot(); }
+  const vec3f& getCamUp()     const { return camera.getUp(); }
+  const vec3f& getTargetPos() const { return camera.getTargetPos(); }
+  float getCamFovy() const { return camera.getFovy(); }
+  float getCamNear() const { return camera.getNear(); }
+  float getCamFar() const { return camera.getFar(); }
 
 private:
   static void keyCallBack(GLFWwindow* window,

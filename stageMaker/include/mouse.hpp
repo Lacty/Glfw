@@ -31,9 +31,8 @@ public:
 
   void popButtonPress(int button) { press.erase(press.find(button)); }
 
-  void setMousePos(GLFWwindow* window) 
-  {
-    glfwGetCursorPos(window, &pos[0], &pos[1]);
+  void setMousePos(GLFWwindow* window, double mouse_x, double mouse_y) {
+    glfwSetCursorPos(window, mouse_x, mouse_y);
   }
 
   bool isPush(int button) {
@@ -53,5 +52,8 @@ public:
     return true;
   }
 
-  const vec2d& getPos() const { return pos; }
+  const vec2d& getPos(GLFWwindow* window) { 
+    glfwGetCursorPos(window, &pos[0], &pos[1]);
+    return pos;
+  }
 };

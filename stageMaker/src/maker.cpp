@@ -1,5 +1,6 @@
 
 #include "../include/maker.hpp"
+#include <Eigen/Geometry>
 
 
 void Maker::updateMouse(AppNative& native) {
@@ -10,14 +11,15 @@ void Maker::updateMouse(AppNative& native) {
       clip_mouse_pos = native.mousePos();
       isBeganPressLeft = true;
     }
-    vec3f rotate(0.0f, 0.0f, 0.0f);
+    vec3f angle(0.0f, 0.0f, 0.0f);
 
-    rotate.x() = native.mousePos().y() - clip_mouse_pos.y();
-    rotate.y() = native.mousePos().x() - clip_mouse_pos.x();
-    rotate.z() = 0.0f;
+    angle.x() = native.mousePos().y() - clip_mouse_pos.y();
+    angle.y() = native.mousePos().x() - clip_mouse_pos.x();
+    angle.z() = 0.0f;
 
-    rotate *= 0.06f;
-    native.camRotate(rotate);
+    angle *= 0.06f;
+
+    native.camRotate(angle);
     native.setMousePos(clip_mouse_pos);
   } else
   if (native.isPullButton(GLFW_MOUSE_BUTTON_RIGHT)) {
@@ -26,18 +28,17 @@ void Maker::updateMouse(AppNative& native) {
 }
 
 void Maker::updateCamera(AppNative& native) {
-  float speed = 0.1f;
   if (native.isPressKey(GLFW_KEY_W)) {
-    native.camTranslate(vec3f(0, 0, -speed));
+    native.camTranslate(vec3f(0, 0, 1));
   }
   if (native.isPressKey(GLFW_KEY_S)) {
-    native.camTranslate(vec3f(0, 0, speed));
+    native.camTranslate(vec3f(0, 0, -1));
   }
   if (native.isPressKey(GLFW_KEY_D)) {
-    native.camTranslate(vec3f(speed, 0, 0));
+    native.camTranslate(vec3f(1, 0, 0));
   }
   if (native.isPressKey(GLFW_KEY_A)) {
-    native.camTranslate(vec3f(-speed, 0, 0));
+    native.camTranslate(vec3f(-1, 0, 0));
   }
 }
 

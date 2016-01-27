@@ -12,11 +12,13 @@ private:
   vec3f rot;
   vec3f up;
   vec3f target_pos;
-  vec3f target_dist;
 
   float fovy;
   float near;
   float far;
+
+  float translateSpeedScale;
+  float rotateSpeedScale;
 
   mat4f perspView();
 

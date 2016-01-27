@@ -9,10 +9,11 @@ pos(pos),
 rot(0.0f, 0.0f, 0.0f),
 up(0.0f, 1.0f, 0.0f),
 target_pos(target_pos),
-target_dist(target_pos - pos),
 fovy(35.0f),
 near(0.5f),
-far(50.0f) {}
+far(50.0f),
+translateSpeedScale(0.8f),
+rotateSpeedScale(0.8f) {}
 
 
 mat4f Camera::perspView() {
@@ -71,7 +72,8 @@ void Camera::registerTw() {
   TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,         "");
   TwAddVarRW(twBar, "rot",         TW_TYPE_DIR3F, &rot,         "");
   TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target_pos,  "");
-  TwAddVarRW(twBar, "target_dist", TW_TYPE_DIR3F, &target_dist, "");
+  TwAddVarRW(twBar, "transSpeed",  TW_TYPE_FLOAT,      &translateSpeedScale, "");
+  TwAddVarRW(twBar, "rotateSpeed", TW_TYPE_FLOAT,      &rotateSpeedScale,    "");
 }
 
 void Camera::update() {
@@ -80,24 +82,33 @@ void Camera::update() {
 }
 
 void Camera::translate(const vec3f& dist) {
-  mat4f m;
+  vec3f forward = target_pos - pos;
+  forward.normalize();
+
+  pos += forward * dist.z() * translateSpeedScale;
+  pos += forward.cross(up).normalized() * dist.x() * translateSpeedScale;
+  target_pos += forward * dist.z() * translateSpeedScale;
+  target_pos += forward.cross(up).normalized() * dist.x() * translateSpeedScale;
+
+
+  /*mat4f m;
   m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
 
   pos.x() = m(0, 3);
   pos.y() = m(1, 3);
   pos.z() = m(2, 3);
 
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_dist);
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
-  target_pos.z() = m(2, 3);
+  target_pos.z() = m(2, 3);*/
 }
 
 void Camera::rotate(const vec3f& quant) {
-  rot.x() -= quant.x();
-  rot.y() -= quant.y();
-  rot.z() -= quant.z();
+  rot.x() += quant.x();
+  rot.y() += quant.y();
+  rot.z() += quant.z();
 
   if (rot.x() >=  180) { rot.x() -= 360; }
   if (rot.x() <= -180) { rot.x() += 360; }
@@ -105,7 +116,7 @@ void Camera::rotate(const vec3f& quant) {
   if (rot.y() <= -180) { rot.y() += 360; }
 
   mat4f m;
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_dist);
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
