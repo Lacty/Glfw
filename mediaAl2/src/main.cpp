@@ -35,7 +35,7 @@ int main() {
   alcMakeContextCurrent(context);
 
   std::vector<ALshort> record_buffer;
-  
+
   // make buff
   ALuint buffer_id;
   alGenBuffers(1, &buffer_id);
@@ -49,6 +49,10 @@ int main() {
 
     if (native.isPushButton(GLFW_MOUSE_BUTTON_RIGHT))
     {
+      // reset
+
+      record_buffer.clear();
+      alSourcei(source_id, AL_BUFFER, 0);
       // start
       alcCaptureStart(capture_device);
       std::cout << "record start" << std::endl;
