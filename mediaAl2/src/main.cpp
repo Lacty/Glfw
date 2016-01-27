@@ -19,61 +19,85 @@ int main() {
   native.setup();
   native.setClearColor(Color::gray());
 
-  // load wav
-  Wav sound("assets/fanfare.wav");
+  // open device
+  ALCdevice* device = alcOpenDevice(nullptr);
 
-  // create device, context
-  ALCdevice*  device  = alcOpenDevice(nullptr);
+  // set sampleRate
+  const int SAMPLING_RATE      = 44100;
+  const int SAMPLE_BUFFER_SIZE = 1024;
+  
+  ALCdevice* capture_device = alcCaptureOpenDevice(nullptr,
+                                                   SAMPLING_RATE,
+                                                   AL_FORMAT_MONO16,
+                                                   SAMPLE_BUFFER_SIZE);
+
   ALCcontext* context = alcCreateContext(device, nullptr);
   alcMakeContextCurrent(context);
 
-  // make sin 440Hz
-  //const size_t pcm_freq = 44100;
-  //const float key_freq = 440.0;
+  std::vector<ALshort> record_buffer;
   
-  //ALshort pcm_data[pcm_freq];
-  //for (size_t i = 0; i < pcm_freq; ++i) {
-  //  pcm_data[i] = std::sin(key_freq * M_PI * 2.0 * i / pcm_freq)
-  //                  * std::numeric_limits<ALshort>::max();
-  //}
-
-  // make buf
+  // make buff
   ALuint buffer_id;
   alGenBuffers(1, &buffer_id);
 
-  // cp buf to sin
-  alBufferData(buffer_id,
-               AL_FORMAT_STEREO16,
-               sound.data(),
-               sound.size(),
-               sound.sampleRate());
-
-  // make src
+  // make source
   ALuint source_id;
   alGenSources(1, &source_id);
-
-  // source_id <- buf
-  alSourcei(source_id, AL_BUFFER, buffer_id);
-
-  // play src
-  alSourcePlay(source_id);
-  
-  // wait 2 sec
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-
-  // delete src
-  alDeleteSources(1, &source_id);
-
-  // delete buf
-  alDeleteBuffers(1, &buffer_id);
 
   while (native.isOpen() && !native.isPushKey(GLFW_KEY_ESCAPE)) {
     native.clearWindowBuff();
 
+    if (native.isPushButton(GLFW_MOUSE_BUTTON_RIGHT))
+    {
+      // start
+      alcCaptureStart(capture_device);
+      std::cout << "record start" << std::endl;
+    }
+    
+    if (native.isPressButton(GLFW_MOUSE_BUTTON_RIGHT))
+    {
+      if (record_buffer.size() < (SAMPLING_RATE * 3)) {
+        ALint sample;
+        alcGetIntegerv(capture_device,
+                       ALC_CAPTURE_SAMPLES,
+                       sizeof(sample), &sample);
+
+        if (sample > 0) {
+          size_t cur_sample = record_buffer.size();
+          size_t new_sample = cur_sample + sample;
+          record_buffer.resize(new_sample);
+
+          alcCaptureSamples(capture_device,
+                            (ALCvoid*)&record_buffer[cur_sample], sample);
+        }
+      }
+    }
+    
+    if (native.isPullButton(GLFW_MOUSE_BUTTON_RIGHT))
+    {
+      // stop capture
+      alcCaptureStop(capture_device);
+      
+      alBufferData(buffer_id,
+                   AL_FORMAT_MONO16,
+                   &record_buffer[0],
+                   record_buffer.size() * sizeof(ALshort),
+                   SAMPLING_RATE);
+      
+      alSourcei(source_id, AL_BUFFER, buffer_id);
+      alSourcePlay(source_id);
+      std::cout << "record play" << std::endl;
+    }
+
     native.updateEvent();
   }
 
-  alcMakeContextCurrent(nullptr);
+  // delete source buff
+  alDeleteSources(1, &source_id);
+  alDeleteBuffers(1, &buffer_id);
+
+  // close
+  alcCaptureCloseDevice(capture_device);
   alcDestroyContext(context);
   alcCloseDevice(device);
 }
