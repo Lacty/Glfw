@@ -9,7 +9,6 @@ class Maker {
 private:
   Stage stage;
   
-  bool isBeganPressLeft;
   vec2d clip_mouse_pos;
   
   void updateCamera(AppNative& native);

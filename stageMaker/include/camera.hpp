@@ -11,6 +11,7 @@ private:
   vec3f pos;
   vec3f up;
   vec3f target;
+  vec3f forward;
 
   float fovy;
   float near;

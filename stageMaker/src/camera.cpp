@@ -9,11 +9,12 @@ Camera::Camera(const vec3f& pos, const vec3f& target) :
 pos(pos),
 up(0.0f, 1.0f, 0.0f),
 target(target),
+forward(target - pos),
 fovy(35.0f),
 near(0.5f),
 far(50.0f),
-translateSpeedScale(0.4f),
-rotateSpeedScale(0.1f) {}
+translateSpeedScale(0.2),
+rotateSpeedScale(0.2) {}
 
 
 void Camera::perspView() {
@@ -69,21 +70,23 @@ void Camera::lookAt() {
 
 void Camera::registerTw() {
   twBar = TwNewBar("camera");
-  TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,    "");
-  TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target, "");
+  TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,     "");
+  TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target,  "");
+  TwAddVarRW(twBar, "forward",     TW_TYPE_DIR3F, &forward, "");
   TwAddVarRW(twBar, "transSpeed",  TW_TYPE_FLOAT, &translateSpeedScale, "");
   TwAddVarRW(twBar, "rotateSpeed", TW_TYPE_FLOAT, &rotateSpeedScale,    "");
+  rotateSpeedScale = 0.2f;
 }
 
 void Camera::update() {
   perspTrans();
   lookAt();
+  
+  forward = target - pos;
+  forward.normalize();
 }
 
 void Camera::translate(const vec3f& dist) {
-  vec3f forward = target - pos;
-  forward.normalize();
-
   vec3f side = forward.cross(up);
   side.normalize();
 
@@ -94,4 +97,14 @@ void Camera::translate(const vec3f& dist) {
   target = Eigen::Translation<float, 3>(acc) * target;
 }
 
-void Camera::rotate(const vec3f& quant) {}
+void Camera::rotate(const vec3f& quant) {
+  Eigen::Quaternionf vertically;
+  vertically = Eigen::AngleAxisf(toRadians(quant.x() * rotateSpeedScale), up.normalized());
+  
+  Eigen::Quaternionf horizontally;
+  horizontally = Eigen::AngleAxisf(toRadians(quant.y() * rotateSpeedScale), forward.cross(up).normalized());
+
+  Eigen::Translation<float, 3> translation(pos);
+
+  target = translation * vertically * horizontally * forward;
+}
