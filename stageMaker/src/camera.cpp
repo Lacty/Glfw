@@ -5,19 +5,18 @@
 #include <Eigen/Geometry>
 
 
-Camera::Camera(const vec3f& pos, const vec3f& target_pos) :
+Camera::Camera(const vec3f& pos, const vec3f& target) :
 pos(pos),
-rot(0.0f, 0.0f, 0.0f),
 up(0.0f, 1.0f, 0.0f),
-target_pos(target_pos),
+target(target),
 fovy(35.0f),
 near(0.5f),
 far(50.0f),
-translateSpeedScale(0.8f),
+translateSpeedScale(0.4f),
 rotateSpeedScale(0.1f) {}
 
 
-mat4f Camera::perspView() {
+void Camera::perspView() {
   float f = 1 / std::tan(toRadians(fovy) * 0.5f);
   float g = -((far + near) / (far - near));
   float h = -((2 * far * near) / (far - near));
@@ -29,21 +28,21 @@ mat4f Camera::perspView() {
        0.0f,  0.0f,     g,     h,
        0.0f,  0.0f,    -1,  0.0f;
   
-  return m;
+  glMultMatrixf(m.data());
 }
 
 void Camera::perspTrans() {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
 
-  glMultMatrixf(perspView().data());
+  perspView();
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 }
 
 void Camera::lookAt() {
-  vec3f a  = pos - target_pos;
+  vec3f a  = pos - target;
   vec3f z_ = a / a.norm();
 
   vec3f b  = up.cross(z_);
@@ -70,11 +69,10 @@ void Camera::lookAt() {
 
 void Camera::registerTw() {
   twBar = TwNewBar("camera");
-  TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,         "");
-  TwAddVarRW(twBar, "rot",         TW_TYPE_DIR3F, &rot,         "");
-  TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target_pos,  "");
-  TwAddVarRW(twBar, "transSpeed",  TW_TYPE_FLOAT,      &translateSpeedScale, "");
-  TwAddVarRW(twBar, "rotateSpeed", TW_TYPE_FLOAT,      &rotateSpeedScale,    "");
+  TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,    "");
+  TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target, "");
+  TwAddVarRW(twBar, "transSpeed",  TW_TYPE_FLOAT, &translateSpeedScale, "");
+  TwAddVarRW(twBar, "rotateSpeed", TW_TYPE_FLOAT, &rotateSpeedScale,    "");
 }
 
 void Camera::update() {
@@ -83,55 +81,17 @@ void Camera::update() {
 }
 
 void Camera::translate(const vec3f& dist) {
-  vec3f forward = target_pos - pos;
+  vec3f forward = target - pos;
   forward.normalize();
 
-  pos += forward * (dist.z() * translateSpeedScale);
-  pos += forward.cross(up).normalized() * (dist.x() * translateSpeedScale);
-  target_pos += forward * (dist.z() * translateSpeedScale);
-  target_pos += forward.cross(up).normalized() * (dist.x() * translateSpeedScale);
+  vec3f side = forward.cross(up);
+  side.normalize();
 
-
-  /*mat4f m;
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(dist);
-
-  pos.x() = m(0, 3);
-  pos.y() = m(1, 3);
-  pos.z() = m(2, 3);
-
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
-
-  target_pos.x() = m(0, 3);
-  target_pos.y() = m(1, 3);
-  target_pos.z() = m(2, 3);*/
+  vec3f acc = side * dist.x() + forward * dist.z();
+  acc *= translateSpeedScale;
+  
+  pos    = Eigen::Translation<float, 3>(acc) * pos;
+  target = Eigen::Translation<float, 3>(acc) * target;
 }
 
-void Camera::rotate(const vec3f& quant) {
-  rot.x() += quant.x() * rotateSpeedScale;
-  rot.y() += quant.y() * rotateSpeedScale;
-  rot.z() += quant.z() * rotateSpeedScale;
-
-  if (rot.x() >=  180) { rot.x() -= 360; }
-  if (rot.x() <= -180) { rot.x() += 360; }
-  if (rot.y() >=  180) { rot.y() -= 360; }
-  if (rot.y() <= -180) { rot.y() += 360; }
-
-  vec3f forward = target_pos - pos;
-  forward.normalize();
-
-  Eigen::Quaternionf quat;
-  quat = Eigen::AngleAxisf(toRadians(quant.x() * rotateSpeedScale), up);
-  forward = quat * forward;
-  quat = Eigen::AngleAxisf(toRadians(quant.y() * rotateSpeedScale), forward.cross(up));
-  forward = quat * forward;
-
-  setTargetPos(forward - pos);
-
-
-  /*mat4f m;
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
-
-  target_pos.x() = m(0, 3);
-  target_pos.y() = m(1, 3);
-  target_pos.z() = m(2, 3);*/
-}
+void Camera::rotate(const vec3f& quant) {}

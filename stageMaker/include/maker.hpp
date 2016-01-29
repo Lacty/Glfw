@@ -12,7 +12,6 @@ private:
   bool isBeganPressLeft;
   vec2d clip_mouse_pos;
   
-  void updateMouse(AppNative& native);
   void updateCamera(AppNative& native);
 
 public:

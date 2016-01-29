@@ -124,6 +124,14 @@ int main() {
     if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
       acc -= side;
     }
+    if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_W)) {
+      acc += forward;
+    }
+    if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_S)) {
+      acc -= forward;
+    }
+
+    acc *= 0.4f;
 
     // MOUSE ---
     glfwGetCursorPos(window, &mouse[0], &mouse[1]);

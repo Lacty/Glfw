@@ -35,7 +35,7 @@ window_size(width, height)
   TwWindowSize(window_size.x(), window_size.y());
 
   // init camera
-  camera = Camera(vec3f(0, 0, 0), vec3f(0, 0, -10));
+  camera = Camera(vec3f(0, 0, 0), vec3f(0, 0, -1));
   camera.setWindowSize(window_size);
   camera.registerTw();
 }
