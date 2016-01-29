@@ -64,6 +64,8 @@ public:
   const vec3f& getCamPos()    const { return camera.getPos(); }
   const vec3f& getCamUp()     const { return camera.getUp(); }
   const vec3f& getCamTarget() const { return camera.getTarget(); }
+  const vec3f& getCamRot()    const { return camera.getRot(); }
+
   float getCamFovy() const { return camera.getFovy(); }
   float getCamNear() const { return camera.getNear(); }
   float getCamFar() const { return camera.getFar(); }

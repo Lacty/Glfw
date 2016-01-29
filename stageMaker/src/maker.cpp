@@ -39,5 +39,5 @@ void Maker::update(AppNative& native) {
 }
 
 void Maker::draw(AppNative& native) {
-  stage.draw(/*native.getCamRot()*/vec3f(0, 0, 0));
+  stage.draw(native.getCamRot());
 }

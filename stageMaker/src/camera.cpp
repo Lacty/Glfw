@@ -73,6 +73,7 @@ void Camera::registerTw() {
   TwAddVarRW(twBar, "pos",         TW_TYPE_DIR3F, &pos,     "");
   TwAddVarRW(twBar, "target",      TW_TYPE_DIR3F, &target,  "");
   TwAddVarRW(twBar, "forward",     TW_TYPE_DIR3F, &forward, "");
+  TwAddVarRW(twBar, "rot",         TW_TYPE_DIR3F, &rot,     "");
   TwAddVarRW(twBar, "transSpeed",  TW_TYPE_FLOAT, &translateSpeedScale, "");
   TwAddVarRW(twBar, "rotateSpeed", TW_TYPE_FLOAT, &rotateSpeedScale,    "");
   rotateSpeedScale = 0.2f;
@@ -82,6 +83,7 @@ void Camera::update() {
   perspTrans();
   lookAt();
   
+  evaluateRotate();
   forward = target - pos;
   forward.normalize();
 }
@@ -107,4 +109,37 @@ void Camera::rotate(const vec3f& quant) {
   Eigen::Translation<float, 3> translation(pos);
 
   target = translation * vertically * horizontally * forward;
+}
+
+
+void Camera::evaluateRotate() {
+  if (!forward.z() && !forward.y()) {
+    rot.x() = 0;
+  }
+  else {
+    rot.x() = toSita(vec2f(-1, 0), vec2f(forward.z(), forward.y()));
+    if (forward.y() < 0) {
+      rot.x() *= -1;
+    }
+  }
+
+  if (!forward.x() && !forward.z()) {
+    rot.y() = 0;
+  }
+  else {
+    rot.y() = toSita(vec2f(0, -1), vec2f(forward.x(), forward.z()));
+    if (forward.x() < 0) {
+      rot.y() *= -1;
+    }
+  }
+
+  if (!forward.x() && !forward.y()) {
+    rot.z() = 0;
+  }
+  else {
+    rot.z() = toSita(vec2f(0, 1), vec2f(forward.x(), forward.y()));
+    if (forward.y() < 0) {
+      rot.z() *= -1;
+    }
+  }
 }

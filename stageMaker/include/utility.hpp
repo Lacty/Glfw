@@ -47,3 +47,10 @@ mat4f transMatrix(const vec3f& vec) {
 
   return m;
 }
+
+double toSita(const vec2f& v1, const vec2f& v2) {
+  double cosSita = v1.dot(v2) / (v1.norm() * v2.norm());
+  double sita = acos(cosSita);
+  sita = sita * 180.0 / M_PI;
+  return sita;
+}

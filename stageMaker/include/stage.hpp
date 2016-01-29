@@ -126,7 +126,7 @@ private:
       // billboard
       glRotatef(_rot.x(), 1, 0, 0);
       glRotatef(_rot.y(), 0, 1, 0);
-      glRotatef(_rot.z(), 0, 0, 1);
+      //glRotatef(_rot.z(), 0, 0, 1);
 
       // Rect vertices
       const float vtx[] = {

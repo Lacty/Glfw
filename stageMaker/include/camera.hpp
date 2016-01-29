@@ -12,6 +12,7 @@ private:
   vec3f up;
   vec3f target;
   vec3f forward;
+  vec3f rot;
 
   float fovy;
   float near;
@@ -24,6 +25,8 @@ private:
 
   void lookAt();
   void perspTrans();
+
+  void evaluateRotate();
 
   TwBar* twBar;
 
@@ -52,6 +55,7 @@ public:
   const vec3f& getPos()    const { return pos; }
   const vec3f& getUp()     const { return up; }
   const vec3f& getTarget() const { return target; }
+  const vec3f& getRot()    const { return rot; }
 
   const float getFovy() const { return fovy; }
   const float getNear() const { return near; }
