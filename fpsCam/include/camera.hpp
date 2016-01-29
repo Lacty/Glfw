@@ -9,7 +9,7 @@ private:
   vec3f pos;
   vec3f up;
   vec3f rot;
-  vec3f forward;
+  vec3f target;
 
   float fovy;
   float aspect;
@@ -27,13 +27,17 @@ public:
          const vec3f& _pos,
          const vec3f& _up,
          const vec3f& _rot,
-         const vec3f& _foward,
+         const vec3f& _target,
          float _fovy,
          float _near,
          float _far);
 
-  void setForward(const vec3f& _forward) {
-    forward = _forward;
+  void setTarget(const vec3f& _target) {
+    target = _target;
+  }
+
+  void setPos(const vec3f& _pos) {
+    pos = _pos;
   }
 
   void setUp(const vec3f& _up) {

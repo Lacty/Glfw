@@ -1,10 +1,24 @@
 
 #include <iostream>
 #include <GLFW/glfw3.h>
+#include <Eigen/Core>
 #include <Eigen/Geometry>
 #include "../include/vector.hpp"
 #include "../include/camera.hpp"
 
+mat4f transMatrix(const vec3f& vec) {
+  float x = vec.x();
+  float y = vec.y();
+  float z = vec.z();
+ 
+  Eigen::Matrix4f m;
+  m << 1, 0, 0, x,
+       0, 1, 0, y,
+       0, 0, 1, z,
+       0, 0, 0, 1;
+
+  return m;
+}
 
 float toRadians(float deg) {
   return (deg * M_PI) / 180.0f;
@@ -32,13 +46,13 @@ int main() {
   vec3f pos(0, 0, 0);
   vec3f up(0, 1, 0);
   vec3f rot(0, 0, 0);
-  vec3f forward(0, 0, -1);
+  vec3f target(0, 0, -1);
   float fovy = 35.0f;
   float near = 0.5f;
   float far  = 50.0f;
 
   Camera cam(width, height,
-             pos, up, rot, forward,
+             pos, up, rot, target,
              fovy, near, far);
 
   vec3f billRot(0, 0, 0);
@@ -63,7 +77,7 @@ int main() {
     
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
       billRot = vec3f(0, 0, 0);
-      forward = vec3f(0, 0, -1);
+      target = vec3f(0, 0, -1);
     }
 
     glVertexPointer(3, GL_FLOAT, 0, vtx);
@@ -95,6 +109,22 @@ int main() {
     glDisableClientState(GL_VERTEX_ARRAY);
 
 
+    // FORWARD ---
+    vec3f forward = target - pos;
+    forward.normalize();
+    
+    // KEY ---
+    vec3f side = forward.cross(up).normalized();
+    side.normalize();
+
+    vec3f acc(0, 0, 0);
+    if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_D)) {
+      acc += side;
+    }
+    if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_A)) {
+      acc -= side;
+    }
+
     // MOUSE ---
     glfwGetCursorPos(window, &mouse[0], &mouse[1]);
     rot.x() = (width * 0.5  - mouse.x()) * 0.1;
@@ -102,13 +132,24 @@ int main() {
     billRot.x() += rot.x();
     billRot.y() += rot.y();
     
-    Eigen::Quaternionf quat;
-    quat = Eigen::AngleAxisf(toRadians(rot.x()), up);
-    forward = quat * forward;
-    quat = Eigen::AngleAxisf(toRadians(rot.y()), forward.cross(up));
-    forward = quat * forward;
+    // FORWARD ---
+    forward = target - pos;
+    forward.normalize();
 
-    cam.setForward(forward);
+    Eigen::Quaternionf quat1;
+    quat1 = Eigen::AngleAxisf(toRadians(rot.x()), up.normalized());
+    Eigen::Quaternionf quat2;
+    quat2 = Eigen::AngleAxisf(toRadians(rot.y()), forward.cross(up).normalized());
+
+    target = quat1 * quat2 * target;
+
+    // TRANSLATE
+    target = Eigen::Translation<float, 3>(acc) * target;
+    pos = Eigen::Translation<float, 3>(acc) * pos;
+   
+    // SET ---1
+    cam.setTarget(target);
+    cam.setPos(pos);
 
     glfwSetCursorPos(window, width * 0.5, height * 0.5);
 

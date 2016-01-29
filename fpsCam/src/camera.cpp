@@ -6,7 +6,7 @@ Camera::Camera(int _width, int _height,
                const vec3f& _pos,
                const vec3f& _up,
                const vec3f& _rot,
-               const vec3f& _forward,
+               const vec3f& _target,
                float _fovy,
                float _near,
                float _far)
@@ -14,7 +14,7 @@ Camera::Camera(int _width, int _height,
   pos    = _pos;
   up     = _up;
   rot    = _rot;
-  forward = _forward;
+  target = _target;
   fovy   = _fovy;
   near   = _near;
   far    = _far;
@@ -37,7 +37,7 @@ void Camera::perspView() {
 }
 
 void Camera::lookAt() {
-  vec3f a  = pos - forward;
+  vec3f a  = pos - target;
   vec3f z_ = a / a.norm();
 
   vec3f b  = up.cross(z_);

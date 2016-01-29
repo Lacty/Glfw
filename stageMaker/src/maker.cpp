@@ -14,11 +14,9 @@ void Maker::updateMouse(AppNative& native) {
     }
     vec3f angle(0.0f, 0.0f, 0.0f);
 
-    angle.x() = native.mousePos().y() - clip_mouse_pos.y();
-    angle.y() = native.mousePos().x() - clip_mouse_pos.x();
-    angle.z() = 0.0f;
-
-    angle *= 0.06f;
+    angle.x() = clip_mouse_pos.x() - native.mousePos().x();
+    angle.y() = clip_mouse_pos.y() - native.mousePos().y();
+    angle.z() = 0;
 
     native.camRotate(angle);
     native.setMousePos(clip_mouse_pos);

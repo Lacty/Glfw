@@ -2,6 +2,7 @@
 #include "../include/camera.hpp"
 #include "../include/utility.hpp"
 #include <GLFW/glfw3.h>
+#include <Eigen/Geometry>
 
 
 Camera::Camera(const vec3f& pos, const vec3f& target_pos) :
@@ -13,7 +14,7 @@ fovy(35.0f),
 near(0.5f),
 far(50.0f),
 translateSpeedScale(0.8f),
-rotateSpeedScale(0.8f) {}
+rotateSpeedScale(0.1f) {}
 
 
 mat4f Camera::perspView() {
@@ -85,10 +86,10 @@ void Camera::translate(const vec3f& dist) {
   vec3f forward = target_pos - pos;
   forward.normalize();
 
-  pos += forward * dist.z() * translateSpeedScale;
-  pos += forward.cross(up).normalized() * dist.x() * translateSpeedScale;
-  target_pos += forward * dist.z() * translateSpeedScale;
-  target_pos += forward.cross(up).normalized() * dist.x() * translateSpeedScale;
+  pos += forward * (dist.z() * translateSpeedScale);
+  pos += forward.cross(up).normalized() * (dist.x() * translateSpeedScale);
+  target_pos += forward * (dist.z() * translateSpeedScale);
+  target_pos += forward.cross(up).normalized() * (dist.x() * translateSpeedScale);
 
 
   /*mat4f m;
@@ -106,21 +107,31 @@ void Camera::translate(const vec3f& dist) {
 }
 
 void Camera::rotate(const vec3f& quant) {
-  rot.x() += quant.x();
-  rot.y() += quant.y();
-  rot.z() += quant.z();
+  rot.x() += quant.x() * rotateSpeedScale;
+  rot.y() += quant.y() * rotateSpeedScale;
+  rot.z() += quant.z() * rotateSpeedScale;
 
   if (rot.x() >=  180) { rot.x() -= 360; }
   if (rot.x() <= -180) { rot.x() += 360; }
   if (rot.y() >=  180) { rot.y() -= 360; }
   if (rot.y() <= -180) { rot.y() += 360; }
 
-  mat4f m;
-  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
+  vec3f forward = target_pos - pos;
+  forward.normalize();
 
-  
+  Eigen::Quaternionf quat;
+  quat = Eigen::AngleAxisf(toRadians(quant.x() * rotateSpeedScale), up);
+  forward = quat * forward;
+  quat = Eigen::AngleAxisf(toRadians(quant.y() * rotateSpeedScale), forward.cross(up));
+  forward = quat * forward;
+
+  setTargetPos(forward - pos);
+
+
+  /*mat4f m;
+  m = transMatrix(pos) * rotMatrix(rot) * transMatrix(target_pos);
 
   target_pos.x() = m(0, 3);
   target_pos.y() = m(1, 3);
-  target_pos.z() = m(2, 3);
+  target_pos.z() = m(2, 3);*/
 }
