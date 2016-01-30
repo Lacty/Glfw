@@ -46,6 +46,7 @@ private:
 
   static void TW_CALL deleteLast(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
+    if (info->current_num == 0) return;
     info->current_num--;
     updateTwBar(info);
 
@@ -92,11 +93,10 @@ private:
   }
 
   void drawStage() {
-    glPushMatrix();
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_CONSTANT_ALPHA);
 
-      // TIPS: camera option
-      glTranslatef(0, 0, -10);
-      
+    glPushMatrix();
       glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
       glColorPointer(4, GL_FLOAT, 0, &colors[0]);
 
@@ -108,14 +108,12 @@ private:
       glDisableClientState(GL_COLOR_ARRAY);
       glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
+
+    glDisable(GL_BLEND);
   }
 
   void drawHighlight(const vec3f& _rot) {
     glPushMatrix();
-      
-      // TIPS: camera option
-      glTranslatef(0, 0, -10);
-
       // current editting vtx pos
       glTranslatef(vertices[getCurrentVtxIndex()],     // X
                    vertices[getCurrentVtxIndex() + 1], // Y
