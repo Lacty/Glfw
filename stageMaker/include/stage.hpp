@@ -10,6 +10,8 @@ class Stage {
 private:
   Loader loader;
 
+  bool isDrawWire;
+
   int current_num;
   int getCurrentVtxIndex() { return current_num * 3; }
   int getCurrentColorIndex() { return current_num * 4; }
@@ -94,7 +96,7 @@ private:
 
   void drawStage() {
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_CONSTANT_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 
     glPushMatrix();
       glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
@@ -110,6 +112,18 @@ private:
     glPopMatrix();
 
     glDisable(GL_BLEND);
+  }
+  
+  void drawWire() {
+    if (!isDrawWire) return;
+    glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+    glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glDrawArrays(GL_LINE_STRIP, 0, getVtxIndex());
+
+    glDisableClientState(GL_VERTEX_ARRAY);
   }
 
   void drawHighlight(const vec3f& _rot) {
@@ -144,7 +158,8 @@ private:
 
 public:
   Stage() :
-  loader("assets/stage.json")
+  loader("assets/stage.json"),
+  isDrawWire(false)
   {
     loader.load();
     vertices = loader.getVertices();
@@ -157,6 +172,7 @@ public:
  
   void registerTw() {
     twBar = TwNewBar("stage");
+    TwAddVarRW(twBar, "draw wire",   TW_TYPE_BOOL8, &isDrawWire, "");
     TwAddVarRO(twBar, "current_num", TW_TYPE_INT8, &current_num, "");
     TwAddButton(twBar, "add vertex",    addVertex,  this, "key=SHIFT+A");
     TwAddButton(twBar, "delete vertex", deleteLast, this, "key=SHIFT+D");
@@ -170,5 +186,6 @@ public:
   void draw(const vec3f& _rot) {
     drawStage();
     drawHighlight(_rot);
+    drawWire();
   }
 };
