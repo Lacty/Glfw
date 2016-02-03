@@ -14,7 +14,7 @@ window_size(width, height)
     exit(1);
   }
 
-   // set pointer to glfw
+  // set pointer to glfw
   glfwSetWindowUserPointer(window, this);
 
   // make window

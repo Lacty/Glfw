@@ -28,13 +28,13 @@ private:
 
   static void TW_CALL addVertex(void* _info) {
     Stage* info = static_cast<Stage*>(_info);
-    float X = info->vertices[info->vertices.size() - 3];
-    float Y = info->vertices[info->vertices.size() - 2];
-    float Z = info->vertices[info->vertices.size() - 1];
-    float R = info->colors[info->colors.size() - 4];
-    float G = info->colors[info->colors.size() - 3];
-    float B = info->colors[info->colors.size() - 2];
-    float A = info->colors[info->colors.size() - 1];
+    float X = info->vertices[info->current_num * 3 + 0];
+    float Y = info->vertices[info->current_num * 3 + 1];
+    float Z = info->vertices[info->current_num * 3 + 2];
+    float R = info->colors[info->current_num * 4 + 0];
+    float G = info->colors[info->current_num * 4 + 1];
+    float B = info->colors[info->current_num * 4 + 2];
+    float A = info->colors[info->current_num * 4 + 3];
     info->vertices.emplace_back(X);
     info->vertices.emplace_back(Y);
     info->vertices.emplace_back(Z);
@@ -42,7 +42,7 @@ private:
     info->colors.emplace_back(G);
     info->colors.emplace_back(B);
     info->colors.emplace_back(A);
-    info->current_num++;
+    info->current_num = int(info->vertices.size()) / 3 - 1;
     updateTwBar(info);
   }
 
@@ -105,7 +105,7 @@ private:
       glEnableClientState(GL_VERTEX_ARRAY);
       glEnableClientState(GL_COLOR_ARRAY);
 
-      glDrawArrays(GL_TRIANGLE_STRIP, 0, getVtxIndex());
+      glDrawArrays(GL_TRIANGLES, 0, getVtxIndex());
 
       glDisableClientState(GL_COLOR_ARRAY);
       glDisableClientState(GL_VERTEX_ARRAY);
